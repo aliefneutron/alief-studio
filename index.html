@@ -106,15 +106,17 @@
         <div>
           <label class="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-1.5">Kode Akses Pengguna</label>
           <div class="relative">
-            <i class="fa-solid fa-key absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 text-sm"></i>
             <input 
-              type="text" 
+              type="password" 
               id="gateAccessCodeInput" 
               required 
               autocomplete="off"
-              placeholder="Contoh: USER2026"
-              class="w-full pl-11 pr-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-2xl focus:outline-none focus:border-blue-500 font-mono tracking-wider uppercase text-sm font-bold placeholder:normal-case placeholder:font-normal placeholder:tracking-normal text-neutral-900 dark:text-white"
+              placeholder="KETIK KODE LISENSI..."
+              class="w-full px-12 py-3.5 bg-[#111] dark:bg-[#111] border border-neutral-700/50 rounded-xl focus:outline-none focus:border-neutral-500 font-mono tracking-[0.2em] text-center text-sm font-bold placeholder:uppercase placeholder:font-bold placeholder:text-neutral-500 text-white transition-colors"
             >
+            <button type="button" id="btnTogglePassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 transition-colors">
+              <i class="fa-solid fa-eye"></i>
+            </button>
           </div>
           <p class="text-[11px] text-neutral-500 mt-1.5 flex items-center gap-1.5">
             <i class="fa-solid fa-circle-info text-blue-500"></i>
@@ -1693,6 +1695,20 @@
     
     document.getElementById("gateAccessCodeForm")?.addEventListener("submit", (e) => {
       loginWithAccessCode(document.getElementById("gateAccessCodeInput").value.trim());
+    });
+
+    document.getElementById("btnTogglePassword")?.addEventListener("click", function() {
+      const input = document.getElementById("gateAccessCodeInput");
+      const icon = this.querySelector("i");
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      }
     });
 
 
