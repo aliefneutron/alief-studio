@@ -930,7 +930,7 @@
       let list = [...(appState.cards || [])];
 
       if (appState.activeCategory && appState.activeCategory !== "Semua") {
-        list = list.filter(c => c.category === appState.activeCategory);
+        list = list.filter(c => (c.category || "").trim().toLowerCase() === appState.activeCategory.trim().toLowerCase());
       }
 
       if (appState.searchQuery.trim() !== "") {
