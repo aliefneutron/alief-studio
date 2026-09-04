@@ -1107,7 +1107,7 @@
           chip.textContent = cat;
           chip.addEventListener("click", () => {
             appState.activeCategory = cat;
-            applyFilters();
+            handleSearch(""); // Kosongkan pencarian otomatis
             renderCategories();
           });
           chipsContainer.appendChild(chip);
@@ -1123,7 +1123,7 @@
           sideBtn.innerHTML = `<i class="fa-solid fa-hashtag text-xs w-5 text-center text-neutral-400"></i> <span>${cat}</span>`;
           sideBtn.addEventListener("click", () => {
             appState.activeCategory = cat;
-            applyFilters();
+            handleSearch(""); // Kosongkan pencarian otomatis
             renderCategories();
           });
           sidebarContainer.appendChild(sideBtn);
@@ -1375,7 +1375,7 @@
         authHeaderArea.innerHTML = `
           <div class="flex items-center gap-2">
             <div class="flex items-center gap-2 p-1.5 rounded-full bg-neutral-100 dark:bg-yt-darkHover border border-neutral-200 dark:border-neutral-800">
-              <img src="${user.avatar || 'alief face.png'}" class="w-7 h-7 rounded-full object-cover border-2 ${isAdmin ? 'border-amber-500' : 'border-blue-500'}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
+              <img src="${user.avatar || 'https://drive.google.com/uc?export=view&id=19I0SECAPX44_PIQERs51r_7WgRLO_WMG'}" class="w-7 h-7 rounded-full object-cover border-2 ${isAdmin ? 'border-amber-500' : 'border-blue-500'}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
               <span class="text-xs font-semibold hidden md:inline max-w-[100px] truncate">${escapeHtml(user.name)}</span>
               <span class="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${isAdmin ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400' : 'bg-blue-500/20 text-blue-600 dark:text-blue-400'}">
                 ${user.role}
@@ -1617,7 +1617,7 @@
           name: match.name || "Pengguna",
           accessCode: match.accessCode,
           role: match.role || "user",
-          avatar: "alief face.png"
+          avatar: "https://drive.google.com/uc?export=view&id=19I0SECAPX44_PIQERs51r_7WgRLO_WMG"
         };
         unlockDashboard();
         await recordActiveSession(code);
