@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AliefStudio - Dashboard Tautan Gambar</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome untuk Ikon Antarmuka -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Roboto & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Roboto', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            yt: {
+              red: '#FF0000',
+              darkBg: '#0F0F0F',
+              darkCard: '#181818',
+              darkHover: '#272727',
+              darkBorder: '#303030',
+              lightBg: '#F9F9F9',
+              lightCard: '#FFFFFF',
+              lightHover: '#F2F2F2',
+              lightBorder: '#E5E5E5'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Scrollbar halus */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #3f3f3f;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cccccc;
+      border-radius: 4px;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #555555;
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+
+<body class="bg-yt-lightBg dark:bg-yt-darkBg text-neutral-900 dark:text-neutral-100 min-h-screen flex flex-col font-sans transition-colors duration-200">
+
+  <!-- ================= LAYAR GERBANG MASUK EKSKLUSIF KODE AKSES ================= -->
+  <div id="authGateScreen" class="fixed inset-0 z-50 bg-neutral-950 flex flex-col items-center justify-center p-4 overflow-y-auto">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-950/40 via-neutral-950 to-neutral-900 pointer-events-none"></div>
+
+    <div class="relative w-full max-w-md bg-white dark:bg-yt-darkCard border border-neutral-300 dark:border-yt-darkBorder rounded-3xl shadow-2xl p-6 sm:p-8 flex flex-col gap-6 backdrop-blur-sm animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Brand Logo & Judul -->
+      <div class="flex flex-col items-center text-center gap-2">
+        <img src="alief face.png" alt="AliefStudio Logo" class="w-20 h-20 rounded-full object-cover shadow-xl shadow-blue-500/20 border-2 border-blue-500 dark:border-blue-400" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
+        <div class="flex flex-col items-center mt-1">
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            Alief<span class="text-blue-600 dark:text-blue-400">Studio</span>
+          </h2>
+          <span class="mt-1.5 text-[11px] text-blue-600 dark:text-blue-400 px-3 py-1 bg-blue-500/10 rounded-full font-bold tracking-widest uppercase border border-blue-500/20">
+            Access Gate
+          </span>
+        </div>
+        <p class="text-xs sm:text-sm text-neutral-500 max-w-xs mt-1">
+          Masukkan kode akses Anda untuk membuka dashboard.
+        </p>
+      </div>
+
+      <!-- FORM MASUK KHUSUS KODE AKSES -->
+      <form id="gateAccessCodeForm" class="flex flex-col gap-4" onsubmit="event.preventDefault();">
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-1.5">Kode Akses Pengguna</label>
+          <div class="relative">
+            <i class="fa-solid fa-key absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 text-sm"></i>
+            <input 
+              type="text" 
+              id="gateAccessCodeInput" 
+              required 
+              autocomplete="off"
+              placeholder="Contoh: USER2026 atau ADMIN2026"
+              class="w-full pl-11 pr-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-2xl focus:outline-none focus:border-blue-500 font-mono tracking-wider uppercase text-sm font-bold placeholder:normal-case placeholder:font-normal placeholder:tracking-normal text-neutral-900 dark:text-white"
+            >
+          </div>
+          <p class="text-[11px] text-neutral-500 mt-1.5 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-info text-blue-500"></i>
+            <span>Dapatkan kode akses dari Administrator AliefStudio.</span>
+          </p>
+        </div>
+
+        <button 
+          type="submit" 
+          id="btnSubmitAccessCode"
+          class="w-full py-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-semibold rounded-2xl transition shadow-md shadow-blue-600/30 flex items-center justify-center gap-2 text-sm"
+        >
+          <i class="fa-solid fa-lock-open"></i>
+          <span>Buka Dashboard Sekarang</span>
+        </button>
+
+        <!-- Pilihan Cepat Demo Akun -->
+        <div class="mt-2 pt-4 border-t border-neutral-200 dark:border-neutral-800 flex flex-col gap-2">
+          <span class="text-[11px] font-semibold text-neutral-400 text-center">Uji Coba Cepat (Klik untuk masuk instan):</span>
+          <div class="grid grid-cols-2 gap-2">
+            <button 
+              type="button" 
+              id="btnGateQuickUser"
+              class="px-3 py-2.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-xl font-medium text-xs text-center transition flex items-center justify-center gap-1.5"
+            >
+              <i class="fa-solid fa-user"></i>
+              <span>User (USER2026)</span>
+            </button>
+            <button 
+              type="button" 
+              id="btnGateQuickAdmin"
+              class="px-3 py-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/20 rounded-xl font-medium text-xs text-center transition flex items-center justify-center gap-1.5"
+            >
+              <i class="fa-solid fa-crown"></i>
+              <span>Admin (ADMIN2026)</span>
+            </button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ================= DASHBOARD UTAMA (TERKUNCI SAMPAI LOGIN) ================= -->
+  <div id="mainDashboardWrapper" class="hidden flex-col min-h-screen">
+    
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-yt-darkBg/95 backdrop-blur border-b border-yt-lightBorder dark:border-yt-darkBorder px-4 h-14 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <button id="btnToggleSidebar" class="p-2 rounded-full hover:bg-neutral-200 dark:hover:bg-yt-darkHover text-lg text-neutral-700 dark:text-neutral-200 transition-colors" title="Buka/Tutup Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <a href="#" class="flex items-center gap-2 select-none focus:outline-none">
+          <img src="alief face.png" alt="AliefStudio Logo" class="w-8 h-8 rounded-xl object-cover shadow-sm border border-neutral-200 dark:border-neutral-700" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
+          <span class="font-bold tracking-tight text-lg font-sans flex items-center">
+            Alief<span class="text-blue-600 dark:text-blue-400">Studio</span>
+            <span class="text-[10px] text-neutral-500 ml-1.5 px-1.5 py-0.5 bg-neutral-200 dark:bg-yt-darkBorder rounded uppercase font-semibold">Visual</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="flex-1 max-w-2xl hidden sm:flex items-center">
+        <div class="flex w-full items-center">
+          <div class="relative w-full">
+            <input 
+              type="text" 
+              id="searchInput" 
+              placeholder="Telusuri kartu gambar, kategori, atau tautan..." 
+              class="w-full pl-4 pr-10 py-2 text-sm bg-neutral-100 dark:bg-neutral-900/90 border border-neutral-300 dark:border-neutral-700 rounded-l-full focus:outline-none focus:border-blue-500 text-neutral-800 dark:text-neutral-100 placeholder-neutral-500"
+            >
+            <button id="btnClearSearch" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200">
+              <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+          </div>
+          <button 
+            id="btnSearch" 
+            class="px-5 py-2 bg-neutral-200 dark:bg-yt-darkHover border border-l-0 border-neutral-300 dark:border-neutral-700 rounded-r-full hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 transition-colors"
+            title="Cari"
+          >
+            <i class="fa-solid fa-magnifying-glass text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button 
+          id="btnOpenAddModal" 
+          class="admin-only hidden items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs sm:text-sm font-medium rounded-full transition-colors shadow-sm"
+        >
+          <i class="fa-solid fa-plus"></i>
+          <span class="hidden md:inline">Tambah Kartu</span>
+        </button>
+
+        <button 
+          id="btnThemeToggle" 
+          class="p-2 rounded-full hover:bg-neutral-200 dark:hover:bg-yt-darkHover text-neutral-700 dark:text-neutral-200 text-base transition-colors" 
+          title="Ganti Tema"
+        >
+          <i class="fa-solid fa-sun hidden dark:inline text-amber-400"></i>
+          <i class="fa-solid fa-moon inline dark:hidden text-indigo-600"></i>
+        </button>
+
+        <!-- Badge Pengguna Online -->
+        <span id="activeUsersBadge" class="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20" title="Pengguna sedang mengakses sekarang">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="activeUsersBadgeText">1 Online</span>
+        </span>
+
+        <div id="authHeaderArea" class="flex items-center ml-1"></div>
+      </div>
+    </header>
+
+    <!-- PENCARIAN MOBILE -->
+    <div class="p-3 bg-white dark:bg-yt-darkBg border-b border-neutral-200 dark:border-yt-darkBorder sm:hidden">
+      <div class="relative w-full">
+        <input 
+          type="text" 
+          id="searchInputMobile" 
+          placeholder="Telusuri kartu gambar atau tautan..." 
+          class="w-full pl-9 pr-8 py-1.5 text-xs bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-full focus:outline-none text-neutral-800 dark:text-neutral-100"
+        >
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xs"></i>
+      </div>
+    </div>
+
+    <!-- BODY CONTENT AREA -->
+    <div class="flex flex-1 overflow-hidden relative">
+      
+      <!-- SIDEBAR MENU -->
+      <aside id="sidebar" class="w-64 shrink-0 bg-white dark:bg-yt-darkBg border-r border-yt-lightBorder dark:border-yt-darkBorder p-3 flex-col gap-1 overflow-y-auto hidden md:flex transition-all duration-300 z-40 absolute md:relative h-full">
+        
+        <a href="#" id="sideNavHome" class="flex items-center gap-4 px-3 py-2.5 rounded-xl bg-neutral-200 dark:bg-yt-darkHover font-medium text-sm text-neutral-900 dark:text-white">
+          <i class="fa-solid fa-house text-lg w-6 text-center text-blue-600 dark:text-blue-400"></i>
+          <span>Beranda Kartu</span>
+        </a>
+
+        <a href="#" id="sideNavTrending" class="flex items-center gap-4 px-3 py-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-yt-darkHover text-sm text-neutral-700 dark:text-neutral-300 transition-colors">
+          <i class="fa-solid fa-fire text-lg w-6 text-center"></i>
+          <span>Populer</span>
+        </a>
+
+        <a href="#" id="sideNavCollections" class="flex items-center gap-4 px-3 py-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-yt-darkHover text-sm text-neutral-700 dark:text-neutral-300 transition-colors">
+          <i class="fa-solid fa-layer-group text-lg w-6 text-center"></i>
+          <span>Koleksi Gambar</span>
+        </a>
+
+        <!-- MENU KHUSUS ADMIN -->
+        <div class="admin-only hidden flex-col">
+          <hr class="my-2 border-neutral-200 dark:border-neutral-800">
+          <div class="px-3 py-1 text-[11px] font-bold text-amber-500 uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Panel Administrator</span>
+          </div>
+          <!-- Menu Pengguna Aktif -->
+          <button id="btnOpenUserMonitoring" class="flex items-center gap-4 px-3 py-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-yt-darkHover text-sm text-neutral-700 dark:text-neutral-300 transition-colors w-full text-left">
+            <i class="fa-solid fa-chart-line text-lg w-6 text-center text-emerald-500"></i>
+            <span class="font-medium">Pengguna Aktif</span>
+          </button>
+          <button id="btnOpenUserManagement" class="flex items-center gap-4 px-3 py-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-yt-darkHover text-sm text-neutral-700 dark:text-neutral-300 transition-colors w-full text-left">
+            <i class="fa-solid fa-users-gear text-lg w-6 text-center text-amber-500"></i>
+            <span class="font-medium">Kelola Akses User</span>
+          </button>
+          <button id="btnOpenCategoryManagement" class="flex items-center gap-4 px-3 py-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-yt-darkHover text-sm text-neutral-700 dark:text-neutral-300 transition-colors w-full text-left">
+            <i class="fa-solid fa-tags text-lg w-6 text-center text-amber-500"></i>
+            <span class="font-medium">Kelola Kategori</span>
+          </button>
+        </div>
+
+        <hr class="my-2 border-neutral-200 dark:border-neutral-800">
+
+        <!-- Kategori Dinamis -->
+        <div class="px-3 py-1 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Kategori</div>
+        <div id="sidebarCategories" class="flex flex-col gap-0.5"></div>
+
+        <!-- Ringkasan Akun & Tombol Kunci (Dihapus) -->
+      </aside>
+
+      <!-- KONTEN UTAMA KARTU -->
+      <main class="flex-1 overflow-y-auto px-4 sm:px-6 py-4 flex flex-col gap-4">
+        
+        <!-- Role Alert Banner (Dihapus) -->
+
+        <!-- Chips Kategori -->
+        <div class="relative flex items-center">
+          <div id="categoryChips" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 text-sm font-medium pr-8"></div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="flex items-center justify-between text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-800 pb-2">
+          <div class="flex items-center gap-2">
+            <span>Menampilkan <strong id="itemCount" class="text-neutral-800 dark:text-neutral-200">0</strong> kartu gambar</span>
+            <span id="activeFilterLabel" class="ml-1 px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 text-xs hidden"></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btnReloadData" class="hover:text-blue-600 transition-colors flex items-center gap-1.5 px-2 py-1 rounded-lg hover:bg-neutral-200 dark:hover:bg-yt-darkHover">
+              <i class="fa-solid fa-rotate-right"></i>
+              <span class="hidden sm:inline">Segarkan</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Grid Kartu Gambar -->
+        <div id="cardGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
+
+        <!-- State Kosong -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
+          <div class="w-16 h-16 bg-neutral-200 dark:bg-yt-darkHover rounded-2xl flex items-center justify-center text-neutral-400 dark:text-neutral-500 text-2xl mb-3">
+            <i class="fa-regular fa-image"></i>
+          </div>
+          <h3 class="text-base font-semibold text-neutral-800 dark:text-neutral-200">Tidak ada kartu gambar yang cocok</h3>
+          <p class="text-sm text-neutral-500 max-w-sm mt-1">Coba sesuaikan kata kunci pencarian atau ganti pilihan kategori.</p>
+          <button id="btnResetFilters" class="mt-4 px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-full hover:bg-blue-700 transition">
+            Reset Filter & Pencarian
+          </button>
+        </div>
+
+        <!-- Skeleton Loading -->
+        <div id="skeletonLoader" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          <div class="flex flex-col gap-3 animate-pulse bg-white dark:bg-yt-darkCard p-3 rounded-2xl border border-neutral-200 dark:border-yt-darkBorder">
+            <div class="w-full h-48 bg-neutral-300 dark:bg-neutral-800 rounded-xl"></div>
+            <div class="h-4 bg-neutral-300 dark:bg-neutral-800 rounded w-4/5"></div>
+            <div class="h-3 bg-neutral-300 dark:bg-neutral-800 rounded w-1/2"></div>
+          </div>
+          <div class="flex flex-col gap-3 animate-pulse bg-white dark:bg-yt-darkCard p-3 rounded-2xl border border-neutral-200 dark:border-yt-darkBorder">
+            <div class="w-full h-48 bg-neutral-300 dark:bg-neutral-800 rounded-xl"></div>
+            <div class="h-4 bg-neutral-300 dark:bg-neutral-800 rounded w-4/5"></div>
+            <div class="h-3 bg-neutral-300 dark:bg-neutral-800 rounded w-1/2"></div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ================= MODAL PANTAU PENGGUNA AKTIF (ADMIN ONLY) ================= -->
+  <div id="userMonitoringModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-yt-darkCard border border-neutral-300 dark:border-neutral-700 rounded-3xl w-full max-w-4xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh]">
+      <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between bg-neutral-50 dark:bg-neutral-900/50">
+        <div>
+          <h3 class="font-bold text-base text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+            <i class="fa-solid fa-tower-broadcast text-emerald-500"></i>
+            <span>Pemantauan Pengguna Aktif Real-Time</span>
+          </h3>
+          <p class="text-xs text-neutral-500 mt-0.5">Memantau siapa saja yang sedang mengakses AliefStudio melalui Kode Akses</p>
+        </div>
+        <button id="btnCloseUserMonitoring" class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex flex-col gap-5">
+        <!-- Kartu Ringkasan Metrik Pengguna -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-lg shadow-sm">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Total Sedang Online</p>
+              <h4 id="monTotalOnline" class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">0 User</h4>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg shadow-sm">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold text-blue-700 dark:text-blue-400 uppercase tracking-wider">Akses User Biasa</p>
+              <h4 id="monTotalUserRole" class="text-xl font-extrabold text-blue-600 dark:text-blue-400">0 User</h4>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg shadow-sm">
+              <i class="fa-solid fa-crown"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider">Akses Administrator</p>
+              <h4 id="monTotalAdminRole" class="text-xl font-extrabold text-amber-600 dark:text-amber-400">0 User</h4>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabel Sesi Akses Aktif -->
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center justify-between text-xs text-neutral-500">
+            <span class="font-semibold uppercase tracking-wider">Daftar Sesi Pengguna Aktif (<span id="monSessionCount">0</span>)</span>
+            <span class="flex items-center gap-1.5 text-[11px] text-emerald-500">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+              Pembaruan live otomatis via Firestore
+            </span>
+          </div>
+
+          <div class="border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden shadow-sm">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 font-semibold border-b border-neutral-200 dark:border-neutral-800">
+                <tr>
+                  <th class="p-3">Nama Pengguna</th>
+                  <th class="p-3">Kode Akses Masuk</th>
+                  <th class="p-3">Peran Hak Akses</th>
+                  <th class="p-3">Waktu Masuk & Aktivitas</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="monitoringTableBody" class="divide-y divide-neutral-200 dark:divide-neutral-800">
+                <!-- Di-render dinamis -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex justify-end">
+        <button id="btnCloseUserMonitoringFooter" class="px-4 py-2 bg-neutral-200 dark:bg-yt-darkHover text-neutral-700 dark:text-neutral-300 rounded-xl font-medium text-xs hover:bg-neutral-300 dark:hover:bg-neutral-700 transition">
+          Tutup Pemantau
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL KELOLA AKSES USER ================= -->
+  <div id="userManagementModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-yt-darkCard border border-neutral-300 dark:border-neutral-700 rounded-2xl w-full max-w-4xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh]">
+      <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between bg-neutral-50 dark:bg-neutral-900/50">
+        <div>
+          <h3 class="font-bold text-base text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+            <i class="fa-solid fa-users-gear text-amber-500"></i>
+            <span>Kelola Kode Akses Pengguna</span>
+          </h3>
+          <p class="text-xs text-neutral-500 mt-0.5">Daftarkan nama pengguna dan berikan Kode Akses untuk login instan</p>
+        </div>
+        <button id="btnCloseUserManagement" class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex flex-col gap-6">
+        
+        <!-- Form Tambah Pengguna Baru & Kode Akses -->
+        <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900/90 border border-neutral-200 dark:border-neutral-800 flex flex-col gap-3">
+          <h4 class="font-semibold text-xs text-neutral-500 uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-user-plus text-blue-600"></i>
+            <span>Daftarkan Pengguna & Buat Kode Akses Baru</span>
+          </h4>
+          
+          <form id="addUserForm" class="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs" onsubmit="event.preventDefault();">
+            <div class="sm:col-span-5">
+              <label class="block font-medium mb-1 text-neutral-700 dark:text-neutral-300">Nama Pengguna *</label>
+              <input 
+                type="text" 
+                id="newUserFullName" 
+                required 
+                placeholder="Contoh: Rian Pratama" 
+                class="w-full px-3 py-2 bg-white dark:bg-yt-darkCard border border-neutral-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:border-blue-500"
+              >
+            </div>
+            <div class="sm:col-span-4">
+              <label class="block font-medium mb-1 text-neutral-700 dark:text-neutral-300">Kode Akses Masuk (PIN) *</label>
+              <input 
+                type="text" 
+                id="newUserAccessCode" 
+                required 
+                placeholder="Contoh: RIAN2026" 
+                class="w-full px-3 py-2 bg-white dark:bg-yt-darkCard border border-neutral-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:border-blue-500 font-mono uppercase font-bold tracking-wider"
+              >
+            </div>
+            <div class="sm:col-span-3 flex items-end gap-2">
+              <div class="w-1/2">
+                <label class="block font-medium mb-1 text-neutral-700 dark:text-neutral-300">Peran *</label>
+                <select 
+                  id="newUserRole" 
+                  class="w-full px-2 py-2 bg-white dark:bg-yt-darkCard border border-neutral-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:border-blue-500"
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <button 
+                type="submit" 
+                class="w-1/2 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition shadow flex items-center justify-center gap-1"
+              >
+                <i class="fa-solid fa-plus"></i>
+                <span>Simpan</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Tabel Pengguna & Kode Akses -->
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center justify-between text-xs text-neutral-500">
+            <span class="font-semibold uppercase tracking-wider">Daftar Pengguna & Kode Akses (<span id="userTotalCount">0</span>)</span>
+            <span class="text-[11px] text-blue-500"><i class="fa-solid fa-copy mr-1"></i>Klik tombol salin untuk memberikan kode akses ke user</span>
+          </div>
+
+          <div class="border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden shadow-sm">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 font-semibold border-b border-neutral-200 dark:border-neutral-800">
+                <tr>
+                  <th class="p-3">Nama Pengguna</th>
+                  <th class="p-3">Kode Akses Masuk</th>
+                  <th class="p-3">Hak Akses</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="userTableBody" class="divide-y divide-neutral-200 dark:divide-neutral-800"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+      <div class="p-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex justify-end">
+        <button id="btnCloseUserManagementFooter" class="px-4 py-2 bg-neutral-200 dark:bg-yt-darkHover text-neutral-700 dark:text-neutral-300 rounded-xl font-medium text-xs hover:bg-neutral-300 dark:hover:bg-neutral-700 transition">
+          Tutup Panel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL KELOLA KATEGORI ================= -->
+  <div id="categoryManagementModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-yt-darkCard border border-neutral-300 dark:border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+      <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between bg-neutral-50 dark:bg-neutral-900/50">
+        <div>
+          <h3 class="font-bold text-base text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+            <i class="fa-solid fa-tags text-amber-500"></i>
+            <span>Kelola Kategori Kartu</span>
+          </h3>
+          <p class="text-xs text-neutral-500 mt-0.5">Tambah kategori baru atau edit nama kategori yang sudah ada</p>
+        </div>
+        <button id="btnCloseCategoryManagement" class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex flex-col gap-6">
+        <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900/90 border border-neutral-200 dark:border-neutral-800 flex flex-col gap-3">
+          <h4 id="categoryFormHeading" class="font-semibold text-xs text-neutral-500 uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-plus text-blue-600"></i>
+            <span>Tambah Kategori Baru</span>
+          </h4>
+
+          <form id="categoryForm" class="flex flex-col sm:flex-row items-center gap-2.5 text-xs" onsubmit="event.preventDefault();">
+            <input type="hidden" id="categoryOldName" value="">
+            <div class="relative flex-1 w-full">
+              <i class="fa-solid fa-tag absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+              <input 
+                type="text" 
+                id="categoryInputName" 
+                required 
+                placeholder="Contoh: Inspirasi Mobile UI" 
+                class="w-full pl-8 pr-3 py-2 bg-white dark:bg-yt-darkCard border border-neutral-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:border-blue-500"
+              >
+            </div>
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <button 
+                type="button" 
+                id="btnCancelCategoryEdit" 
+                class="hidden px-3.5 py-2 bg-neutral-200 dark:bg-yt-darkHover text-neutral-700 dark:text-neutral-300 font-medium rounded-lg hover:bg-neutral-300 transition"
+              >
+                Batal
+              </button>
+              <button 
+                type="submit" 
+                id="btnSubmitCategory"
+                class="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition shadow flex items-center justify-center gap-1.5 whitespace-nowrap"
+              >
+                <i class="fa-solid fa-check"></i>
+                <span id="btnSubmitCategoryText">Simpan Kategori</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden shadow-sm">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 font-semibold border-b border-neutral-200 dark:border-neutral-800">
+              <tr>
+                <th class="p-3">Nama Kategori</th>
+                <th class="p-3 text-center">Jumlah Kartu</th>
+                <th class="p-3">Status</th>
+                <th class="p-3 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="categoryTableBody" class="divide-y divide-neutral-200 dark:divide-neutral-800"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="p-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 flex justify-end">
+        <button id="btnCloseCategoryManagementFooter" class="px-4 py-2 bg-neutral-200 dark:bg-yt-darkHover text-neutral-700 dark:text-neutral-300 rounded-xl font-medium text-xs hover:bg-neutral-300 dark:hover:bg-neutral-700 transition">
+          Tutup Panel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL TAMBAH / EDIT KARTU GAMBAR ================= -->
+  <div id="cardModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-yt-darkCard border border-neutral-200 dark:border-neutral-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col">
+      <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+        <h3 id="modalTitle" class="font-bold text-base text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+          <i class="fa-regular fa-image text-blue-600"></i>
+          <span>Atur Kartu Gambar</span>
+        </h3>
+        <button id="btnCloseCardModal" class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="cardForm" class="p-6 flex flex-col gap-4 text-sm max-h-[80vh] overflow-y-auto" onsubmit="event.preventDefault();">
+        <input type="hidden" id="formCardId" value="">
+
+        <div>
+          <label class="block font-semibold mb-1 text-neutral-700 dark:text-neutral-300">Judul Kartu *</label>
+          <input 
+            type="text" 
+            id="formTitle" 
+            required 
+            placeholder="Contoh: Inspirasi Desain Web Modern" 
+            class="w-full px-3.5 py-2.5 bg-neutral-50 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-blue-500"
+          >
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1 text-neutral-700 dark:text-neutral-300">URL Tautan Tujuan (Ketika Diklik) *</label>
+          <div class="relative">
+            <i class="fa-solid fa-link absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 text-xs"></i>
+            <input 
+              type="url" 
+              id="formTargetUrl" 
+              required 
+              placeholder="https://contoh-link-tujuan.com" 
+              class="w-full pl-9 pr-3.5 py-2.5 bg-neutral-50 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-blue-500"
+            >
+          </div>
+        </div>
+
+        <!-- PILIHAN METODE GAMBAR -->
+        <div class="flex flex-col gap-2">
+          <label class="block font-semibold text-neutral-700 dark:text-neutral-300">Gambar Kartu *</label>
+          
+          <div class="flex bg-neutral-100 dark:bg-neutral-900 p-1 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs font-semibold mb-1">
+            <button type="button" id="tabImgUpload" class="flex-1 py-1.5 rounded-lg bg-white dark:bg-yt-darkHover text-blue-600 dark:text-blue-400 shadow-sm transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span>Upload Lokal</span>
+            </button>
+            <button type="button" id="tabImgUrl" class="flex-1 py-1.5 rounded-lg text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-link"></i>
+              <span>URL / Drive</span>
+            </button>
+          </div>
+
+          <div id="imgUploadContainer" class="flex flex-col gap-1.5">
+            <div class="relative border-2 border-dashed border-neutral-300 dark:border-neutral-700 rounded-xl p-4 flex flex-col items-center justify-center gap-2 hover:border-blue-500 dark:hover:border-blue-500 transition cursor-pointer bg-neutral-50/50 dark:bg-neutral-900/40" id="dropZoneArea">
+              <input type="file" id="formLocalImageInput" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+              <div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg pointer-events-none">
+                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+              </div>
+              <p class="text-xs text-center font-medium text-neutral-600 dark:text-neutral-300 pointer-events-none">
+                Klik atau seret gambar dari perangkat Anda
+              </p>
+            </div>
+          </div>
+
+          <div id="imgUrlContainer" class="hidden flex-col gap-1">
+            <div class="relative">
+              <i class="fa-regular fa-image absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="formImageUrl" 
+                placeholder="URL gambar atau link Google Drive" 
+                class="w-full pl-9 pr-3.5 py-2.5 bg-neutral-50 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-blue-500 text-xs sm:text-sm"
+              >
+            </div>
+          </div>
+
+          <input type="hidden" id="formFinalImageData" value="">
+          
+          <div class="mt-1 p-2 bg-neutral-100 dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-800">
+            <div class="flex items-center justify-between mb-1.5 px-1">
+              <span class="text-[11px] font-medium text-neutral-500">Pratinjau Gambar:</span>
+              <button type="button" id="btnClearSelectedImage" class="hidden text-[10px] text-red-500 hover:underline">Hapus Gambar</button>
+            </div>
+            <div class="w-full h-36 rounded-lg overflow-hidden bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center relative">
+              <img id="imagePreview" src="" alt="Pratinjau" class="w-full h-full object-cover hidden">
+              <div id="imagePreviewPlaceholder" class="text-neutral-400 text-xs flex flex-col items-center gap-1">
+                <i class="fa-solid fa-mountain-sun text-2xl"></i>
+                <span id="previewPlaceholderText">Pilih file atau tempel link</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold mb-1 text-neutral-700 dark:text-neutral-300">Kategori</label>
+            <select 
+              id="formCategory" 
+              class="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-blue-500"
+            ></select>
+          </div>
+          <div>
+            <label class="block font-semibold mb-1 text-neutral-700 dark:text-neutral-300">Sumber</label>
+            <input 
+              type="text" 
+              id="formSource" 
+              placeholder="Contoh: Dribbble" 
+              class="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-blue-500"
+            >
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1 text-neutral-700 dark:text-neutral-300">Deskripsi Singkat</label>
+          <textarea 
+            id="formDescription" 
+            rows="2" 
+            placeholder="Catatan kecil..." 
+            class="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none focus:border-blue-500 resize-none text-xs"
+          ></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-neutral-200 dark:border-neutral-800 flex justify-end gap-2">
+          <button 
+            type="button" 
+            id="btnCancelCardModal" 
+            class="px-4 py-2 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-xl font-medium transition"
+          >
+            Batal
+          </button>
+          <button 
+            type="submit" 
+            id="btnSaveCard"
+            class="px-5 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-xl font-semibold transition flex items-center gap-2 shadow"
+          >
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span id="btnSaveText">Simpan</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL KONFIRMASI HAPUS ================= -->
+  <div id="deleteModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-yt-darkCard border border-neutral-200 dark:border-neutral-700 rounded-2xl w-full max-w-sm shadow-2xl p-5 flex flex-col gap-4 text-center">
+      <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-950/50 text-red-500 mx-auto flex items-center justify-center text-xl">
+        <i class="fa-solid fa-trash-can"></i>
+      </div>
+      <div>
+        <h4 class="font-bold text-base text-neutral-900 dark:text-neutral-100" id="deleteModalHeading">Hapus Item?</h4>
+        <p class="text-xs text-neutral-500 mt-1" id="deleteModalDesc">Tindakan ini tidak dapat dibatalkan.</p>
+      </div>
+      <div class="flex justify-center gap-2 pt-2">
+        <button id="btnCancelDelete" class="px-4 py-2 rounded-xl text-neutral-600 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 font-medium text-xs hover:bg-neutral-200 transition">
+          Batal
+        </button>
+        <button id="btnConfirmDelete" class="px-4 py-2 rounded-xl text-white bg-red-600 hover:bg-red-700 font-semibold text-xs transition">
+          Ya, Hapus
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTAINER TOAST NOTIFIKASI -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ================= SCRIPT MODULE UTAMA (FIREBASE & UI TERPADU) ================= -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { 
+      getAuth, 
+      signInAnonymously, 
+      signInWithCustomToken,
+      onAuthStateChanged, 
+      signOut 
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { 
+      getFirestore,
+      collection, 
+      doc, 
+      setDoc, 
+      deleteDoc, 
+      onSnapshot,
+      initializeFirestore,
+      persistentLocalCache
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // 1. Konfigurasi Firebase
+    const userFirebaseConfig = {
+      apiKey: "AIzaSyAkeDejP5gPosVeNrmqY0OrO3HQx8y-3YM",
+      authDomain: "alief-studio.firebaseapp.com",
+      projectId: "alief-studio",
+      storageBucket: "alief-studio.firebasestorage.app",
+      messagingSenderId: "609884365975",
+      appId: "1:609884365975:web:f300f4dd91847a22edf5d2",
+      measurementId: "G-NXVZD32NGJ"
+    };
+
+    const resolvedFirebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : userFirebaseConfig;
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'alief-studio';
+
+    const app = initializeApp(resolvedFirebaseConfig);
+    const auth = getAuth(app);
+    let db;
+    try {
+      db = initializeFirestore(app, {
+        localCache: persistentLocalCache()
+      });
+    } catch (e) {
+      console.warn("IndexedDB persistence disabled or failed, falling back to normal Firestore", e);
+      db = getFirestore(app);
+    }
+    
+    // Fallback timeout untuk menghilangkan loading jika Firebase tersangkut
+    setTimeout(() => { showSkeleton(false); }, 7000);
+
+    // 2. State Aplikasi Global (Tanpa 'window.' untuk keamanan scope)
+    const appState = {
+      isAuthenticated: false,
+      currentUser: null,
+      firebaseUser: null,
+      currentSessionId: null,
+      cards: [],
+      filteredCards: [],
+      categories: ["Semua", "Desain & UI", "Fotografi", "Referensi Web", "Produktivitas", "Dokumen & Aset"],
+      categoryDocs: [],
+      usersList: [
+        { id: "usr_admin", name: "Admin Utama", accessCode: "ADMIN2026", role: "admin", status: "Aktif" },
+        { id: "usr_002", name: "User Reguler", accessCode: "USER2026", role: "user", status: "Aktif" }
+      ],
+      activeSessions: [],
+      activeCategory: "Semua",
+      searchQuery: "",
+      deleteTarget: null
+    };
+
+    const USERS_COLLECTION = collection(db, 'artifacts', appId, 'public', 'data', 'users');
+    const CARDS_COLLECTION = collection(db, 'artifacts', appId, 'public', 'data', 'cards');
+    const CATEGORIES_COLLECTION = collection(db, 'artifacts', appId, 'public', 'data', 'categories');
+    const SESSIONS_COLLECTION = collection(db, 'artifacts', appId, 'public', 'data', 'active_sessions');
+
+    let heartbeatTimer = null;
+
+    // ================= FUNGSI UTILITAS UI =================
+    
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toastContainer");
+      if(!container) return;
+      const toast = document.createElement("div");
+      const icons = {
+        success: "fa-solid fa-circle-check text-emerald-400",
+        error: "fa-solid fa-triangle-exclamation text-rose-400",
+        warning: "fa-solid fa-circle-exclamation text-amber-400",
+        info: "fa-solid fa-circle-info text-blue-400"
+      };
+
+      toast.className = "flex items-center gap-3 px-4 py-3 rounded-xl bg-neutral-900/95 dark:bg-yt-darkCard/95 text-white text-xs sm:text-sm shadow-2xl border border-neutral-700/60 backdrop-blur transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto max-w-sm";
+      toast.innerHTML = `
+        <i class="${icons[type] || icons.info} text-base"></i>
+        <span class="flex-1">${escapeHtml(message)}</span>
+      `;
+
+      container.appendChild(toast);
+      requestAnimationFrame(() => toast.classList.remove("translate-y-2", "opacity-0"));
+      setTimeout(() => {
+        toast.classList.add("opacity-0", "translate-y-2");
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    function showSkeleton(show) {
+      const skeleton = document.getElementById("skeletonLoader");
+      const cardGrid = document.getElementById("cardGrid");
+      if (!skeleton || !cardGrid) return;
+      if (show) {
+        skeleton.classList.remove("hidden");
+        skeleton.classList.add("grid");
+        cardGrid.classList.add("hidden");
+        cardGrid.classList.remove("grid");
+      } else {
+        skeleton.classList.add("hidden");
+        skeleton.classList.remove("grid");
+        cardGrid.classList.remove("hidden");
+        cardGrid.classList.add("grid");
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    function extractHostname(url) {
+      try { return new URL(url).hostname.replace('www.', ''); } catch (e) { return "Tautan"; }
+    }
+
+    function copyToClipboard(text) {
+      try {
+        const dummy = document.createElement("textarea");
+        document.body.appendChild(dummy);
+        dummy.value = text;
+        dummy.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummy);
+        return true;
+      } catch (err) { return false; }
+    }
+
+    function convertGoogleDriveUrl(url) {
+      if (!url) return "";
+      const trimmed = url.trim();
+      if (trimmed.includes("drive.google.com")) {
+        let fileId = "";
+        const fileDMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (fileDMatch && fileDMatch[1]) fileId = fileDMatch[1];
+        if (!fileId) {
+          const idMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+          if (idMatch && idMatch[1]) fileId = idMatch[1];
+        }
+        if (!fileId) {
+          const ucMatch = trimmed.match(/\/uc\?[^&]*id=([a-zA-Z0-9_-]+)/);
+          if (ucMatch && ucMatch[1]) fileId = ucMatch[1];
+        }
+        if (fileId) return `https://lh3.googleusercontent.com/d/${fileId}`;
+      }
+      return trimmed;
+    }
+
+    // ================= FUNGSI RENDER TAMPILAN =================
+
+    function applyFilters() {
+      let list = [...(appState.cards || [])];
+
+      if (appState.activeCategory && appState.activeCategory !== "Semua") {
+        list = list.filter(c => c.category === appState.activeCategory);
+      }
+
+      if (appState.searchQuery.trim() !== "") {
+        const q = appState.searchQuery.toLowerCase();
+        list = list.filter(c => 
+          (c.title && c.title.toLowerCase().includes(q)) ||
+          (c.source && c.source.toLowerCase().includes(q)) ||
+          (c.targetUrl && c.targetUrl.toLowerCase().includes(q)) ||
+          (c.category && c.category.toLowerCase().includes(q))
+        );
+      }
+
+      appState.filteredCards = list;
+      renderCards();
+      const itemCountElem = document.getElementById("itemCount");
+      if(itemCountElem) itemCountElem.textContent = list.length;
+    }
+
+    function renderCards() {
+      const cardGrid = document.getElementById("cardGrid");
+      const emptyState = document.getElementById("emptyState");
+      if(!cardGrid || !emptyState) return;
+
+      cardGrid.innerHTML = "";
+
+      if (appState.filteredCards.length === 0) {
+        emptyState.classList.remove("hidden");
+        emptyState.classList.add("flex");
+        return;
+      }
+
+      emptyState.classList.add("hidden");
+      emptyState.classList.remove("flex");
+
+      const isAdmin = appState.currentUser && appState.currentUser.role === "admin";
+      const fallbackImage = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80";
+
+      appState.filteredCards.forEach(card => {
+        const cardEl = document.createElement("div");
+        cardEl.className = "group bg-white dark:bg-yt-darkCard border border-neutral-200 dark:border-yt-darkBorder hover:border-blue-500/60 dark:hover:border-blue-500/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer";
+
+        const domainName = extractHostname(card.targetUrl);
+        const resolvedImage = convertGoogleDriveUrl(card.imageUrl) || fallbackImage;
+
+        const adminButtons = isAdmin ? `
+          <button class="btn-edit-card p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-yt-darkHover text-neutral-600 dark:text-neutral-300 hover:text-amber-500 transition" title="Edit Gambar & Tautan">
+            <i class="fa-regular fa-pen-to-square"></i>
+          </button>
+          <button class="btn-delete-card p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-yt-darkHover text-neutral-600 dark:text-neutral-300 hover:text-red-500 transition" title="Hapus Kartu">
+            <i class="fa-regular fa-trash-can"></i>
+          </button>
+        ` : '';
+
+        cardEl.innerHTML = `
+          <div class="relative w-full h-48 bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
+            <img 
+              src="${resolvedImage}" 
+              alt="${escapeHtml(card.title)}" 
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              onerror="this.onerror=null; this.src='${fallbackImage}';"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none"></div>
+
+            <div class="absolute top-2.5 left-2.5">
+              <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-black/60 text-white backdrop-blur-md border border-white/10 shadow-sm">
+                ${escapeHtml(card.category || 'Galeri')}
+              </span>
+            </div>
+
+            <div class="absolute top-2.5 right-2.5">
+              <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium bg-blue-600/90 text-white backdrop-blur-md shadow-sm">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                <span class="max-w-[110px] truncate">${escapeHtml(domainName)}</span>
+              </span>
+            </div>
+
+            <div class="absolute bottom-2 left-3 right-3 text-white/95 text-xs font-medium truncate drop-shadow">
+              <i class="fa-regular fa-compass mr-1 text-blue-400"></i> ${escapeHtml(card.source || domainName)}
+            </div>
+          </div>
+
+          <div class="p-4 flex-1 flex flex-col justify-between gap-3">
+            <div>
+              <h3 class="font-bold text-sm sm:text-base text-neutral-900 dark:text-neutral-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 leading-snug">
+                ${escapeHtml(card.title)}
+              </h3>
+              ${card.description ? `<p class="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2 mt-1.5">${escapeHtml(card.description)}</p>` : ''}
+            </div>
+
+            <div class="pt-3 border-t border-neutral-100 dark:border-yt-darkBorder flex items-center justify-between text-xs text-neutral-500">
+              <span class="text-[11px] text-neutral-400">
+                <i class="fa-regular fa-clock mr-1"></i>${escapeHtml(card.updatedAt || 'Tersedia')}
+              </span>
+
+              <div class="flex items-center gap-1">
+                <button class="btn-copy-link p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-yt-darkHover text-neutral-600 dark:text-neutral-300 hover:text-blue-600 transition" title="Salin Tautan">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+                ${adminButtons}
+              </div>
+            </div>
+          </div>
+        `;
+
+        cardEl.addEventListener("click", (e) => {
+          if (e.target.closest(".btn-copy-link") || e.target.closest(".btn-edit-card") || e.target.closest(".btn-delete-card")) return;
+          if (card.targetUrl) {
+            showToast(`Membuka: ${card.title}`, "info");
+            window.open(card.targetUrl, "_blank", "noopener,noreferrer");
+          }
+        });
+
+        cardEl.querySelector(".btn-copy-link")?.addEventListener("click", (e) => {
+          e.stopPropagation();
+          copyToClipboard(card.targetUrl);
+          showToast("Tautan berhasil disalin!", "success");
+        });
+
+        cardEl.querySelector(".btn-edit-card")?.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openEditModal(card);
+        });
+
+        cardEl.querySelector(".btn-delete-card")?.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openDeleteCardModal(card.id, card.title);
+        });
+
+        cardGrid.appendChild(cardEl);
+      });
+    }
+
+    function renderCategories() {
+      const chipsContainer = document.getElementById("categoryChips");
+      const sidebarContainer = document.getElementById("sidebarCategories");
+      if(chipsContainer) chipsContainer.innerHTML = "";
+      if(sidebarContainer) sidebarContainer.innerHTML = "";
+
+      appState.categories.forEach(cat => {
+        const isActive = appState.activeCategory === cat;
+
+        if(chipsContainer) {
+          const chip = document.createElement("button");
+          chip.className = `px-3.5 py-1.5 rounded-xl whitespace-nowrap text-xs sm:text-sm font-medium transition ${
+            isActive 
+              ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 shadow-sm" 
+              : "bg-neutral-200/80 hover:bg-neutral-300 dark:bg-yt-darkHover dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200"
+          }`;
+          chip.textContent = cat;
+          chip.addEventListener("click", () => {
+            appState.activeCategory = cat;
+            applyFilters();
+            renderCategories();
+          });
+          chipsContainer.appendChild(chip);
+        }
+
+        if (cat !== "Semua" && sidebarContainer) {
+          const sideBtn = document.createElement("button");
+          sideBtn.className = `w-full text-left flex items-center gap-3 px-3 py-2 rounded-xl text-xs sm:text-sm transition-colors ${
+            isActive 
+              ? "bg-neutral-200 dark:bg-yt-darkHover font-semibold text-neutral-900 dark:text-white" 
+              : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-yt-darkHover"
+          }`;
+          sideBtn.innerHTML = `<i class="fa-solid fa-hashtag text-xs w-5 text-center text-neutral-400"></i> <span>${cat}</span>`;
+          sideBtn.addEventListener("click", () => {
+            appState.activeCategory = cat;
+            applyFilters();
+            renderCategories();
+          });
+          sidebarContainer.appendChild(sideBtn);
+        }
+      });
+    }
+
+    function updateFormCategoryOptions(selectedValue = "") {
+      const formCategorySelect = document.getElementById("formCategory");
+      if (!formCategorySelect) return;
+      const nonSemua = appState.categories.filter(c => c !== "Semua");
+      
+      formCategorySelect.innerHTML = nonSemua.map(cat => `
+        <option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>
+      `).join("");
+
+      if (selectedValue && nonSemua.includes(selectedValue)) {
+        formCategorySelect.value = selectedValue;
+      } else if (nonSemua.length > 0) {
+        formCategorySelect.value = nonSemua[0];
+      }
+    }
+
+    function renderUserTable(users) {
+      const userTableBody = document.getElementById("userTableBody");
+      if(!userTableBody) return;
+      userTableBody.innerHTML = "";
+      
+      const totalElem = document.getElementById("userTotalCount");
+      if(totalElem) totalElem.textContent = users.length;
+
+      users.forEach(user => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors";
+        const isCurrent = appState.currentUser && appState.currentUser.uid === user.id;
+
+        tr.innerHTML = `
+          <td class="p-3">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs uppercase">
+                ${(user.name || 'U').charAt(0)}
+              </div>
+              <div>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-100">${escapeHtml(user.name || 'User')}</span>
+                ${isCurrent ? '<span class="ml-1 text-[10px] bg-neutral-200 dark:bg-neutral-700 px-1 rounded text-neutral-500 font-semibold">(Anda)</span>' : ''}
+              </div>
+            </div>
+          </td>
+          <td class="p-3">
+            <div class="flex items-center gap-1.5">
+              <span class="font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded border border-blue-200 dark:border-blue-800 text-[11px] tracking-wider">
+                ${escapeHtml(user.accessCode || 'TANPA-KODE')}
+              </span>
+              <button class="btn-copy-code p-1 text-neutral-400 hover:text-blue-600 transition" title="Salin Kode Akses" data-code="${escapeHtml(user.accessCode || '')}">
+                <i class="fa-regular fa-copy text-xs"></i>
+              </button>
+            </div>
+          </td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded-full font-semibold uppercase text-[10px] ${user.role === 'admin' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-300 dark:border-amber-800' : 'bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400'}">
+              ${user.role || 'user'}
+            </span>
+          </td>
+          <td class="p-3">
+            <span class="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-[11px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ${user.status || 'Aktif'}
+            </span>
+          </td>
+          <td class="p-3 text-right">
+            ${isCurrent ? '<span class="text-neutral-400 text-[11px] italic">Aktif</span>' : `
+              <button class="btn-del-user px-2 py-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/50 rounded transition" data-id="${user.id}" data-name="${escapeHtml(user.name)}">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            `}
+          </td>
+        `;
+
+        tr.querySelector(".btn-copy-code")?.addEventListener("click", (e) => {
+          const code = e.currentTarget.dataset.code;
+          copyToClipboard(code);
+          showToast(`Kode akses "${code}" disalin! Bagikan ke user.`, "success");
+        });
+
+        tr.querySelector(".btn-del-user")?.addEventListener("click", () => {
+          openDeleteUserModal(user.id, user.name);
+        });
+
+        userTableBody.appendChild(tr);
+      });
+    }
+
+    function renderMonitoringTable() {
+      const tbody = document.getElementById("monitoringTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      const now = Date.now();
+      const sessions = appState.activeSessions || [];
+
+      if (sessions.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="p-6 text-center text-neutral-400">
+              <i class="fa-solid fa-users-slash text-2xl mb-1 block"></i>
+              Belum ada data sesi pengguna aktif yang tercatat.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      sessions.forEach(sess => {
+        const isOnline = sess.status === "Online" && (!sess.lastActiveTimestamp || (now - sess.lastActiveTimestamp) < 120000);
+        const isCurrent = appState.currentSessionId === sess.sessionId;
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors";
+
+        const statusBadge = isOnline 
+          ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Online
+             </span>`
+          : `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-neutral-200 dark:bg-neutral-800 text-neutral-500">
+               <span class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span> Nonaktif
+             </span>`;
+
+        tr.innerHTML = `
+          <td class="p-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs uppercase">
+                ${(sess.userName || 'U').charAt(0)}
+              </div>
+              <div>
+                <div class="font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-1">
+                  <span>${escapeHtml(sess.userName || 'Pengguna')}</span>
+                  ${isCurrent ? '<span class="text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 px-1.5 py-0.2 rounded font-semibold">(Sesi Anda)</span>' : ''}
+                </div>
+                <span class="text-[10px] text-neutral-400 flex items-center gap-1">
+                  <i class="fa-solid fa-laptop text-[9px]"></i> ${escapeHtml(sess.device || 'Perangkat')}
+                </span>
+              </div>
+            </div>
+          </td>
+          <td class="p-3">
+            <span class="font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-1 rounded border border-blue-200 dark:border-blue-800 text-[11px]">
+              ${escapeHtml(sess.accessCodeUsed || 'KODE-PIN')}
+            </span>
+          </td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded-full font-semibold uppercase text-[10px] ${sess.role === 'admin' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-300 dark:border-amber-800' : 'bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400'}">
+              ${sess.role || 'user'}
+            </span>
+          </td>
+          <td class="p-3">
+            <p class="text-[11px] text-neutral-700 dark:text-neutral-300 font-medium">Masuk: ${escapeHtml(sess.loginAt || '-')}</p>
+            <p class="text-[10px] text-neutral-400">Aktivitas: ${isOnline ? 'Baru saja' : 'Beberapa menit lalu'}</p>
+          </td>
+          <td class="p-3">
+            ${statusBadge}
+          </td>
+          <td class="p-3 text-right">
+            ${isCurrent ? `
+              <span class="text-neutral-400 text-[11px] italic">Aktif</span>
+            ` : `
+              <button class="btn-kick-sess px-2.5 py-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg text-xs font-semibold transition border border-red-500/20" data-session-id="${escapeHtml(sess.id)}">
+                <i class="fa-solid fa-power-off mr-1"></i> Putus Sesi
+              </button>
+            `}
+          </td>
+        `;
+
+        tr.querySelector(".btn-kick-sess")?.addEventListener("click", (e) => {
+          openKickSessionModal(e.currentTarget.dataset.sessionId);
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function loadCategoryTable() {
+      const tbody = document.getElementById("categoryTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      const totalCountElem = document.getElementById("categoryTotalCount");
+      if (totalCountElem) totalCountElem.textContent = appState.categories.length;
+
+      appState.categories.forEach(cat => {
+        const isSystem = cat === "Semua";
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors";
+        
+        tr.innerHTML = `
+          <td class="p-3 font-semibold text-neutral-900 dark:text-neutral-100">${escapeHtml(cat)}</td>
+          <td class="p-3 text-center">
+            <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-neutral-100 dark:bg-yt-darkHover text-neutral-700 dark:text-neutral-300">
+              ${isSystem ? appState.cards.length : appState.cards.filter(c => c.category === cat).length} kartu
+            </span>
+          </td>
+          <td class="p-3 text-[11px] ${isSystem ? 'text-amber-500 font-semibold' : 'text-emerald-500'}">
+            ${isSystem ? 'Sistem' : 'Dinamis'}
+          </td>
+          <td class="p-3 text-right">
+            ${isSystem ? '<span class="text-neutral-400 text-[11px] italic">Permanen</span>' : `
+              <div class="flex items-center justify-end gap-1">
+                <button class="btn-edit-cat p-1.5 text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/40 rounded transition" title="Ubah Nama Kategori" data-cat="${escapeHtml(cat)}">
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+                <button class="btn-del-cat p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 rounded transition" title="Hapus Kategori" data-cat="${escapeHtml(cat)}">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            `}
+          </td>
+        `;
+
+        tr.querySelector(".btn-edit-cat")?.addEventListener("click", () => {
+          document.getElementById("categoryOldName").value = cat;
+          document.getElementById("categoryInputName").value = cat;
+          document.getElementById("categoryFormHeading").innerHTML = `<i class="fa-regular fa-pen-to-square text-amber-500"></i> <span>Edit Kategori: "${escapeHtml(cat)}"</span>`;
+          document.getElementById("btnSubmitCategoryText").textContent = "Perbarui Nama";
+          document.getElementById("btnCancelCategoryEdit").classList.remove("hidden");
+          document.getElementById("categoryInputName").focus();
+        });
+
+        tr.querySelector(".btn-del-cat")?.addEventListener("click", () => {
+          openDeleteCategoryModal(cat);
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateAuthUI() {
+      const authHeaderArea = document.getElementById("authHeaderArea");
+      const sidebarUserBadge = document.getElementById("sidebarUserBadge");
+      const currentRoleText = document.getElementById("currentRoleText");
+      const roleAlertBanner = document.getElementById("roleAlertBanner");
+      const roleAlertText = document.getElementById("roleAlertText");
+
+      const user = appState.currentUser;
+      const isAdmin = user && user.role === "admin";
+
+      document.querySelectorAll(".admin-only").forEach(el => {
+        if (isAdmin) { el.classList.remove("hidden"); el.classList.add("flex"); } 
+        else { el.classList.add("hidden"); el.classList.remove("flex"); }
+      });
+
+      if (user) {
+        authHeaderArea.innerHTML = `
+          <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 p-1.5 rounded-full bg-neutral-100 dark:bg-yt-darkHover border border-neutral-200 dark:border-neutral-800">
+              <img src="${user.avatar || 'alief face.png'}" class="w-7 h-7 rounded-full object-cover border-2 ${isAdmin ? 'border-amber-500' : 'border-blue-500'}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
+              <span class="text-xs font-semibold hidden md:inline max-w-[100px] truncate">${escapeHtml(user.name)}</span>
+              <span class="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${isAdmin ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400' : 'bg-blue-500/20 text-blue-600 dark:text-blue-400'}">
+                ${user.role}
+              </span>
+            </div>
+            <button id="btnHeaderLockApp" class="p-2 text-neutral-500 hover:text-red-500 text-sm transition" title="Keluar Aplikasi">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+          </div>
+        `;
+
+        document.getElementById("btnHeaderLockApp").addEventListener("click", lockApplication);
+
+        // sidebarUserBadge.innerHTML = `
+        //   <img src="${user.avatar || 'alief face.png'}" class="w-9 h-9 rounded-full object-cover border ${isAdmin ? 'border-amber-500' : 'border-blue-500'}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
+        //   <div class="flex-1 min-w-0">
+        //     <p class="text-xs font-bold truncate text-neutral-900 dark:text-neutral-100">${escapeHtml(user.name)}</p>
+        //     <p class="text-[11px] text-neutral-500 truncate font-mono font-semibold text-blue-600 dark:text-blue-400">${escapeHtml(user.accessCode || '')}</p>
+        //   </div>
+        // `;
+        // currentRoleText.innerText = user.role.toUpperCase();
+      }
+
+      if (!isAdmin) {
+        // Role alert banner logic removed
+      }
+
+      renderCards();
+    }
+
+    // ================= PENGENDALIAN MODAL & FUNGSI UI LAINNYA =================
+    
+    function resetCategoryForm() {
+      const catForm = document.getElementById("categoryForm");
+      if(catForm) catForm.reset();
+      document.getElementById("categoryOldName").value = "";
+      document.getElementById("categoryFormHeading").innerHTML = `<i class="fa-solid fa-plus text-blue-600"></i> <span>Tambah Kategori Baru</span>`;
+      document.getElementById("btnSubmitCategoryText").textContent = "Simpan Kategori";
+      document.getElementById("btnCancelCategoryEdit").classList.add("hidden");
+    }
+
+    function clearPreview() {
+      const img = document.getElementById("imagePreview");
+      const ph = document.getElementById("imagePreviewPlaceholder");
+      if(img) { img.src = ""; img.classList.add("hidden"); }
+      if(ph) ph.classList.remove("hidden");
+      const btn = document.getElementById("btnClearSelectedImage");
+      if(btn) btn.classList.add("hidden");
+      document.getElementById("formFinalImageData").value = "";
+      document.getElementById("formImageUrl").value = "";
+      document.getElementById("formLocalImageInput").value = "";
+    }
+
+    function displayPreviewImage(srcUrl) {
+      if (!srcUrl) { clearPreview(); return; }
+      const img = document.getElementById("imagePreview");
+      const ph = document.getElementById("imagePreviewPlaceholder");
+      const btn = document.getElementById("btnClearSelectedImage");
+      img.src = srcUrl;
+      img.onload = () => { img.classList.remove("hidden"); ph.classList.add("hidden"); btn.classList.remove("hidden"); };
+      img.onerror = () => { img.classList.add("hidden"); ph.classList.remove("hidden"); };
+    }
+
+    function openEditModal(card) {
+      document.getElementById("formCardId").value = card.id;
+      document.getElementById("formTitle").value = card.title || "";
+      document.getElementById("formTargetUrl").value = card.targetUrl || "";
+      document.getElementById("formSource").value = card.source || "";
+      document.getElementById("formDescription").value = card.description || "";
+      const imgVal = card.imageUrl || "";
+      document.getElementById("formFinalImageData").value = imgVal;
+      
+      const tabUp = document.getElementById("tabImgUpload");
+      const tabUrl = document.getElementById("tabImgUrl");
+      if (imgVal.startsWith("data:image")) { if(tabUp) tabUp.click(); } 
+      else { if(tabUrl) tabUrl.click(); document.getElementById("formImageUrl").value = imgVal; }
+      
+      displayPreviewImage(imgVal);
+      updateFormCategoryOptions(card.category);
+      document.getElementById("modalTitle").innerHTML = `<i class="fa-regular fa-pen-to-square text-amber-500"></i><span>Edit Kartu Gambar</span>`;
+      document.getElementById("btnSaveText").textContent = "Simpan Perubahan";
+      document.getElementById("cardModal").classList.remove("hidden");
+      document.getElementById("cardModal").classList.add("flex");
+    }
+
+    function closeCardModal() {
+      document.getElementById("cardModal").classList.add("hidden");
+      document.getElementById("cardModal").classList.remove("flex");
+      document.getElementById("cardForm").reset();
+      clearPreview();
+    }
+
+    function openDeleteCardModal(id, title) {
+      appState.deleteTarget = { type: "card", id };
+      document.getElementById("deleteModalHeading").textContent = "Hapus Kartu Gambar?";
+      document.getElementById("deleteModalDesc").textContent = `Yakin menghapus kartu "${title}"?`;
+      document.getElementById("deleteModal").classList.remove("hidden");
+      document.getElementById("deleteModal").classList.add("flex");
+    }
+
+    function openDeleteUserModal(id, name) {
+      appState.deleteTarget = { type: "user", id };
+      document.getElementById("deleteModalHeading").textContent = "Hapus Akses Pengguna?";
+      document.getElementById("deleteModalDesc").textContent = `Hapus user "${name}" dan kode aksesnya?`;
+      document.getElementById("deleteModal").classList.remove("hidden");
+      document.getElementById("deleteModal").classList.add("flex");
+    }
+
+    function openDeleteCategoryModal(catName) {
+      appState.deleteTarget = { type: "category", id: catName };
+      document.getElementById("deleteModalHeading").textContent = "Hapus Kategori?";
+      document.getElementById("deleteModalDesc").textContent = `Yakin menghapus kategori "${catName}"? Kartu terkait akan dialihkan ke kategori default.`;
+      document.getElementById("deleteModal").classList.remove("hidden");
+      document.getElementById("deleteModal").classList.add("flex");
+    }
+
+    function closeDeleteModal() {
+      appState.deleteTarget = null;
+      document.getElementById("deleteModal").classList.add("hidden");
+      document.getElementById("deleteModal").classList.remove("flex");
+    }
+
+    function openKickSessionModal(sessionId) {
+      appState.deleteTarget = { type: "kick_session", id: sessionId };
+      document.getElementById("deleteModalHeading").textContent = "Akhiri Sesi Pengguna?";
+      document.getElementById("deleteModalDesc").textContent = "Sesi akses pengguna ini akan diputus dari pemantauan.";
+      document.getElementById("deleteModal").classList.remove("hidden");
+      document.getElementById("deleteModal").classList.add("flex");
+    }
+
+    // ================= CORE FIREBASE LOGIC =================
+    
+    function initAuth() {
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          signInAnonymously(auth);
+        }
+      } catch (err) {
+        console.warn("Auth notice:", err);
+      }
+    }
+    initAuth();
+
+    onAuthStateChanged(auth, (user) => {
+      appState.firebaseUser = user;
+      if (user) {
+        setupRealtimeFirestore();
+      }
+    });
+
+    function setupRealtimeFirestore() {
+      // 1. Realtime Cards
+      onSnapshot(CARDS_COLLECTION, (snapshot) => {
+        const fetchedCards = [];
+        snapshot.forEach((docItem) => {
+          fetchedCards.push({ id: docItem.id, ...docItem.data() });
+        });
+
+        if (fetchedCards.length > 0) {
+          appState.cards = fetchedCards;
+        } else if (appState.cards.length === 0) {
+          appState.cards = [];
+        }
+        applyFilters();
+        showSkeleton(false);
+      }, (err) => {
+        showSkeleton(false);
+      });
+
+      // 2. Realtime Categories
+      onSnapshot(CATEGORIES_COLLECTION, (snapshot) => {
+        const fetchedCats = ["Semua"];
+        const fetchedDocs = [];
+
+        snapshot.forEach((docItem) => {
+          const data = docItem.data();
+          if (data.name && !fetchedCats.includes(data.name)) {
+            fetchedCats.push(data.name);
+            fetchedDocs.push({ id: docItem.id, name: data.name });
+          }
+        });
+
+        if (fetchedCats.length > 1) {
+          appState.categories = fetchedCats;
+          appState.categoryDocs = fetchedDocs;
+        }
+
+        renderCategories();
+        updateFormCategoryOptions();
+        loadCategoryTable();
+      });
+
+      // 3. Realtime Users List
+      onSnapshot(USERS_COLLECTION, (snapshot) => {
+        const users = [];
+        snapshot.forEach((docItem) => {
+          users.push({ id: docItem.id, ...docItem.data() });
+        });
+        
+        const combined = [...users];
+        if (!combined.some(u => u.accessCode === "ADMIN2026")) {
+          combined.unshift({ id: "usr_admin", name: "Admin Utama", accessCode: "ADMIN2026", role: "admin", status: "Aktif" });
+        }
+        if (!combined.some(u => u.accessCode === "USER2026")) {
+          combined.push({ id: "usr_002", name: "User Reguler", accessCode: "USER2026", role: "user", status: "Aktif" });
+        }
+        appState.usersList = combined;
+        
+        renderUserTable(appState.usersList);
+      });
+
+      // 4. Realtime Active Sessions
+      onSnapshot(SESSIONS_COLLECTION, (snapshot) => {
+        const sessions = [];
+        snapshot.forEach((docItem) => {
+          sessions.push({ id: docItem.id, ...docItem.data() });
+        });
+        appState.activeSessions = sessions;
+        updateActiveSessionsCount();
+        renderMonitoringTable();
+      });
+    }
+
+    async function loginWithAccessCode(rawCode) {
+      const code = (rawCode || "").trim().toUpperCase();
+      if (!code) {
+        showToast("Harap masukkan kode akses Anda", "warning");
+        return;
+      }
+
+      showToast("Memeriksa kode akses...", "info");
+      const match = appState.usersList.find(u => (u.accessCode || "").toUpperCase() === code);
+
+      if (match) {
+        appState.currentUser = {
+          uid: match.id || "usr_" + Date.now(),
+          name: match.name || "Pengguna",
+          accessCode: match.accessCode,
+          role: match.role || "user",
+          avatar: "alief face.png"
+        };
+        unlockDashboard();
+        await recordActiveSession(code);
+        showToast(`Akses Diterima! Selamat datang, ${match.name} (${match.role.toUpperCase()})`, "success");
+      } else {
+        showToast("Kode akses tidak valid. Hubungi Admin.", "error");
+      }
+    }
+
+    function unlockDashboard() {
+      appState.isAuthenticated = true;
+      document.getElementById("authGateScreen").classList.add("hidden");
+      document.getElementById("mainDashboardWrapper").classList.remove("hidden");
+      document.getElementById("mainDashboardWrapper").classList.add("flex");
+      updateAuthUI();
+      applyFilters();
+    }
+
+    async function lockApplication() {
+      await removeActiveSession();
+      appState.isAuthenticated = false;
+      appState.currentUser = null;
+
+      document.getElementById("gateAccessCodeInput").value = "";
+      document.getElementById("mainDashboardWrapper").classList.add("hidden");
+      document.getElementById("mainDashboardWrapper").classList.remove("flex");
+      document.getElementById("authGateScreen").classList.remove("hidden");
+      showToast("Aplikasi telah dikunci kembali", "info");
+    }
+
+    async function recordActiveSession(accessCode) {
+      if (!appState.currentUser) return;
+      
+      const user = appState.currentUser;
+      const sessionId = "sess_" + (user.uid || Date.now()) + "_" + Math.random().toString(36).substring(2, 7);
+      appState.currentSessionId = sessionId;
+
+      const deviceDesc = /Mobi|Android/i.test(navigator.userAgent) ? "Ponsel / Smartphone" : "Komputer / Desktop";
+
+      const sessionData = {
+        sessionId: sessionId,
+        userId: user.uid || "usr_unknown",
+        userName: user.name || "Pengguna",
+        accessCodeUsed: accessCode,
+        role: user.role || "user",
+        device: deviceDesc,
+        status: "Online",
+        loginAt: new Date().toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit' }) + " WIB",
+        lastActiveTimestamp: Date.now()
+      };
+
+      try {
+        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'active_sessions', sessionId), sessionData);
+      } catch (err) {}
+
+      if (heartbeatTimer) clearInterval(heartbeatTimer);
+      heartbeatTimer = setInterval(async () => {
+        if (appState.isAuthenticated && appState.currentSessionId) {
+          try {
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'active_sessions', appState.currentSessionId), {
+              status: "Online",
+              lastActiveTimestamp: Date.now()
+            }, { merge: true });
+          } catch(e) {}
+        }
+      }, 30000);
+    }
+
+    async function removeActiveSession() {
+      if (heartbeatTimer) clearInterval(heartbeatTimer);
+      if (appState.currentSessionId) {
+        try {
+          await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'active_sessions', appState.currentSessionId));
+        } catch (err) {}
+        appState.currentSessionId = null;
+      }
+    }
+
+    function updateActiveSessionsCount() {
+      const now = Date.now();
+      const onlineSessions = (appState.activeSessions || []).filter(s => {
+        return s.status === "Online" && (!s.lastActiveTimestamp || (now - s.lastActiveTimestamp) < 120000);
+      });
+
+      const count = onlineSessions.length;
+      const countText = count > 0 ? `${count} Online` : `1 Online`;
+      
+      const badgeText = document.getElementById("activeUsersBadgeText");
+      if (badgeText) badgeText.textContent = countText;
+
+      const monTotalOnline = document.getElementById("monTotalOnline");
+      if (monTotalOnline) monTotalOnline.textContent = `${count} User`;
+
+      const userRoleCount = onlineSessions.filter(s => s.role === 'user').length;
+      const adminRoleCount = onlineSessions.filter(s => s.role === 'admin').length;
+
+      const monTotalUserRole = document.getElementById("monTotalUserRole");
+      if (monTotalUserRole) monTotalUserRole.textContent = `${userRoleCount} User`;
+
+      const monTotalAdminRole = document.getElementById("monTotalAdminRole");
+      if (monTotalAdminRole) monTotalAdminRole.textContent = `${adminRoleCount} User`;
+
+      const monSessionCount = document.getElementById("monSessionCount");
+      if (monSessionCount) monSessionCount.textContent = onlineSessions.length;
+    }
+
+    // ================= EVENT LISTENER ATTACHMENTS =================
+    
+    document.getElementById("gateAccessCodeForm")?.addEventListener("submit", (e) => {
+      loginWithAccessCode(document.getElementById("gateAccessCodeInput").value.trim());
+    });
+
+    document.getElementById("btnGateQuickUser")?.addEventListener("click", () => {
+      document.getElementById("gateAccessCodeInput").value = "USER2026";
+      loginWithAccessCode("USER2026");
+    });
+
+    document.getElementById("btnGateQuickAdmin")?.addEventListener("click", () => {
+      document.getElementById("gateAccessCodeInput").value = "ADMIN2026";
+      loginWithAccessCode("ADMIN2026");
+    });
+
+    document.getElementById("btnSidebarLockApp")?.addEventListener("click", lockApplication);
+    document.getElementById("btnSwitchLock")?.addEventListener("click", lockApplication);
+    document.getElementById("btnThemeToggle")?.addEventListener("click", () => document.documentElement.classList.toggle("dark"));
+    
+    document.getElementById("btnToggleSidebar")?.addEventListener("click", () => {
+      const sidebar = document.getElementById("sidebar");
+      if (window.innerWidth < 768) {
+        // Mode Layar Kecil (Mobile): Toggle class 'hidden' & 'flex'
+        if (sidebar.classList.contains("hidden")) {
+          sidebar.classList.remove("hidden");
+          sidebar.classList.add("flex");
+        } else {
+          sidebar.classList.add("hidden");
+          sidebar.classList.remove("flex");
+        }
+      } else {
+        // Mode Layar Besar (Desktop): Toggle properti inline display
+        if (sidebar.style.display === 'none') {
+          sidebar.style.display = '';
+        } else {
+          sidebar.style.display = 'none';
+        }
+      }
+    });
+
+    const searchInput = document.getElementById("searchInput");
+    const searchInputMobile = document.getElementById("searchInputMobile");
+    const btnClearSearch = document.getElementById("btnClearSearch");
+
+    function handleSearch(val) {
+      appState.searchQuery = val;
+      if(searchInput) searchInput.value = val;
+      if(searchInputMobile) searchInputMobile.value = val;
+      if (val) btnClearSearch?.classList.remove("hidden");
+      else btnClearSearch?.classList.add("hidden");
+      applyFilters();
+    }
+
+    searchInput?.addEventListener("input", (e) => handleSearch(e.target.value));
+    searchInputMobile?.addEventListener("input", (e) => handleSearch(e.target.value));
+    btnClearSearch?.addEventListener("click", () => handleSearch(""));
+
+    document.getElementById("btnResetFilters")?.addEventListener("click", () => {
+      handleSearch(""); appState.activeCategory = "Semua"; renderCategories(); applyFilters();
+    });
+
+    document.getElementById("btnReloadData")?.addEventListener("click", () => {
+      showToast("Data disinkron otomatis dari Firestore", "info"); applyFilters();
+    });
+
+    const tabImgUpload = document.getElementById("tabImgUpload");
+    const tabImgUrl = document.getElementById("tabImgUrl");
+    const imgUploadContainer = document.getElementById("imgUploadContainer");
+    const imgUrlContainer = document.getElementById("imgUrlContainer");
+    
+    tabImgUpload?.addEventListener("click", () => {
+      tabImgUpload.className = "flex-1 py-1.5 rounded-lg bg-white dark:bg-yt-darkHover text-blue-600 dark:text-blue-400 shadow-sm transition flex items-center justify-center gap-1.5";
+      tabImgUrl.className = "flex-1 py-1.5 rounded-lg text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 transition flex items-center justify-center gap-1.5";
+      imgUploadContainer.classList.remove("hidden");
+      imgUrlContainer.classList.add("hidden");
+    });
+
+    tabImgUrl?.addEventListener("click", () => {
+      tabImgUrl.className = "flex-1 py-1.5 rounded-lg bg-white dark:bg-yt-darkHover text-blue-600 dark:text-blue-400 shadow-sm transition flex items-center justify-center gap-1.5";
+      tabImgUpload.className = "flex-1 py-1.5 rounded-lg text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 transition flex items-center justify-center gap-1.5";
+      imgUrlContainer.classList.remove("hidden");
+      imgUploadContainer.classList.add("hidden");
+      document.getElementById("formImageUrl").focus();
+    });
+
+    document.getElementById("formLocalImageInput")?.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith("image/")) { showToast("File harus berupa gambar", "warning"); return; }
+      showToast("Mengompres gambar...", "info");
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const rawImg = new Image();
+        rawImg.onload = () => {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 1200; const MAX_HEIGHT = 800;
+          let width = rawImg.width; let height = rawImg.height;
+          if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } } 
+          else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
+          canvas.width = width; canvas.height = height;
+          canvas.getContext("2d").drawImage(rawImg, 0, 0, width, height);
+          const optimizedDataUrl = canvas.toDataURL("image/webp", 0.85);
+          document.getElementById("formFinalImageData").value = optimizedDataUrl;
+          displayPreviewImage(optimizedDataUrl);
+          showToast("Gambar lokal siap digunakan!", "success");
+        };
+        rawImg.onerror = () => {
+          showToast("Gagal membaca file gambar", "error");
+        };
+        rawImg.src = event.target.result;
+      };
+      reader.onerror = () => showToast("Gagal membaca file", "error");
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById("formImageUrl")?.addEventListener("input", (e) => {
+      let rawUrl = e.target.value.trim();
+      if (!rawUrl) { clearPreview(); return; }
+      const directUrl = convertGoogleDriveUrl(rawUrl);
+      document.getElementById("formFinalImageData").value = directUrl;
+      displayPreviewImage(directUrl);
+    });
+
+    document.getElementById("btnClearSelectedImage")?.addEventListener("click", clearPreview);
+
+    document.getElementById("btnCloseCardModal")?.addEventListener("click", closeCardModal);
+    document.getElementById("btnCancelCardModal")?.addEventListener("click", closeCardModal);
+    document.getElementById("btnCancelDelete")?.addEventListener("click", closeDeleteModal);
+    document.getElementById("btnCancelCategoryEdit")?.addEventListener("click", resetCategoryForm);
+    
+    document.getElementById("btnOpenUserMonitoring")?.addEventListener("click", () => {
+      document.getElementById("userMonitoringModal").classList.remove("hidden");
+      document.getElementById("userMonitoringModal").classList.add("flex");
+      renderMonitoringTable();
+    });
+    document.getElementById("btnCloseUserMonitoring")?.addEventListener("click", () => {
+      document.getElementById("userMonitoringModal").classList.add("hidden");
+      document.getElementById("userMonitoringModal").classList.remove("flex");
+    });
+    document.getElementById("btnCloseUserMonitoringFooter")?.addEventListener("click", () => {
+      document.getElementById("userMonitoringModal").classList.add("hidden");
+      document.getElementById("userMonitoringModal").classList.remove("flex");
+    });
+
+    document.getElementById("btnOpenUserManagement")?.addEventListener("click", () => {
+      document.getElementById("userManagementModal").classList.remove("hidden");
+      document.getElementById("userManagementModal").classList.add("flex");
+      renderUserTable(appState.usersList);
+    });
+    document.getElementById("btnCloseUserManagement")?.addEventListener("click", () => {
+      document.getElementById("userManagementModal").classList.add("hidden");
+      document.getElementById("userManagementModal").classList.remove("flex");
+    });
+    document.getElementById("btnCloseUserManagementFooter")?.addEventListener("click", () => {
+      document.getElementById("userManagementModal").classList.add("hidden");
+      document.getElementById("userManagementModal").classList.remove("flex");
+    });
+
+    document.getElementById("btnOpenCategoryManagement")?.addEventListener("click", () => {
+      resetCategoryForm();
+      document.getElementById("categoryManagementModal").classList.remove("hidden");
+      document.getElementById("categoryManagementModal").classList.add("flex");
+      loadCategoryTable();
+    });
+    document.getElementById("btnCloseCategoryManagement")?.addEventListener("click", () => {
+      document.getElementById("categoryManagementModal").classList.add("hidden");
+      document.getElementById("categoryManagementModal").classList.remove("flex");
+      resetCategoryForm();
+    });
+    document.getElementById("btnCloseCategoryManagementFooter")?.addEventListener("click", () => {
+      document.getElementById("categoryManagementModal").classList.add("hidden");
+      document.getElementById("categoryManagementModal").classList.remove("flex");
+      resetCategoryForm();
+    });
+
+    document.getElementById("btnOpenAddModal")?.addEventListener("click", () => {
+      document.getElementById("cardForm").reset();
+      document.getElementById("formCardId").value = "";
+      clearPreview();
+      const tabUp = document.getElementById("tabImgUpload");
+      if(tabUp) tabUp.click();
+      document.getElementById("modalTitle").innerHTML = `<i class="fa-regular fa-image text-blue-600"></i><span>Tambah Kartu Baru</span>`;
+      document.getElementById("btnSaveText").textContent = "Simpan Kartu";
+      updateFormCategoryOptions();
+      document.getElementById("cardModal").classList.remove("hidden");
+      document.getElementById("cardModal").classList.add("flex");
+    });
+
+    // ================= FIREBASE DATABASE ACTIONS (SUBMITS) =================
+
+    document.getElementById("categoryForm")?.addEventListener("submit", async (e) => {
+      if (appState.currentUser?.role !== "admin") return;
+
+      const inputName = document.getElementById("categoryInputName").value.trim();
+      const oldName = document.getElementById("categoryOldName").value.trim();
+      const isEditing = Boolean(oldName);
+      if (!inputName) return;
+
+      if (isEditing) {
+        if (oldName.toLowerCase() === inputName.toLowerCase()) {
+          showToast("Nama kategori tidak berubah", "info"); resetCategoryForm(); return;
+        }
+        if (appState.categories.some(c => c.toLowerCase() === inputName.toLowerCase() && c.toLowerCase() !== oldName.toLowerCase())) {
+          showToast(`Kategori "${inputName}" sudah ada!`, "warning"); return;
+        }
+
+        showToast("Memperbarui nama kategori...", "info");
+        let docId = null;
+        if (appState.categoryDocs) {
+          const found = appState.categoryDocs.find(d => d.name === oldName);
+          if (found) docId = found.id;
+        }
+        if (!docId) docId = "cat_" + oldName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+
+        try {
+          await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', docId), {
+            name: inputName, updatedAt: new Date().toISOString()
+          }, { merge: true });
+
+          const affectedCards = (appState.cards || []).filter(c => c.category === oldName);
+          for (const c of affectedCards) {
+            try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'cards', c.id), { category: inputName }, { merge: true }); } catch(err) {}
+          }
+          showToast(`Kategori berhasil diubah menjadi "${inputName}"!`, "success");
+          resetCategoryForm();
+        } catch (err) { showToast("Gagal memperbarui: " + err.message, "error"); }
+      } else {
+        if (appState.categories.some(c => c.toLowerCase() === inputName.toLowerCase())) {
+          showToast(`Kategori "${inputName}" sudah ada!`, "warning"); return;
+        }
+        showToast("Menambahkan kategori baru...", "info");
+        try {
+          await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', "cat_" + Date.now()), {
+            name: inputName, createdAt: new Date().toISOString()
+          });
+          showToast(`Kategori "${inputName}" ditambahkan!`, "success");
+          resetCategoryForm();
+        } catch (err) { showToast("Gagal menambahkan: " + err.message, "error"); }
+      }
+    });
+
+    document.getElementById("addUserForm")?.addEventListener("submit", async (e) => {
+      if (appState.currentUser?.role !== "admin") return;
+
+      const name = document.getElementById("newUserFullName").value.trim();
+      const accessCode = document.getElementById("newUserAccessCode").value.trim().toUpperCase();
+      const role = document.getElementById("newUserRole").value;
+
+      showToast("Menyimpan kode akses pengguna...", "info");
+      try {
+        const newUserId = "usr_" + Date.now();
+        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', newUserId), {
+          id: newUserId, name: name, accessCode: accessCode, role: role, status: "Aktif", createdAt: new Date().toLocaleDateString("id-ID")
+        });
+        showToast(`User ${name} dibuat dengan PIN: ${accessCode}`, "success");
+        document.getElementById("addUserForm").reset();
+      } catch (err) { showToast("Gagal menyimpan: " + err.message, "error"); }
+    });
+
+    document.getElementById("cardForm")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (appState.currentUser?.role !== "admin") return;
+
+      const cardId = document.getElementById("formCardId").value || ("img_" + Date.now());
+      const isEditing = Boolean(document.getElementById("formCardId").value);
+      const finalImage = document.getElementById("formFinalImageData").value.trim();
+
+      if (!finalImage) { showToast("Harap pilih gambar dari lokal atau masukkan URL", "warning"); return; }
+
+      const payload = {
+        id: cardId,
+        title: document.getElementById("formTitle").value.trim(),
+        targetUrl: document.getElementById("formTargetUrl").value.trim(),
+        imageUrl: finalImage,
+        category: document.getElementById("formCategory").value,
+        source: document.getElementById("formSource").value.trim() || extractHostname(document.getElementById("formTargetUrl").value.trim()),
+        description: document.getElementById("formDescription").value.trim(),
+        updatedAt: isEditing ? "Diedit baru saja" : "Baru saja"
+      };
+
+      const btnSave = document.getElementById("btnSaveCard");
+      const originalBtnHTML = btnSave.innerHTML;
+      btnSave.disabled = true;
+      btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span id="btnSaveText">Menyimpan...</span>';
+      btnSave.classList.add("opacity-70", "cursor-not-allowed");
+
+      showToast("Menyimpan kartu...", "info");
+      
+      try {
+        // Simpan ke state lokal terlebih dahulu untuk respons UI yang cepat
+        const existingIdx = appState.cards.findIndex(c => c.id === cardId);
+        if (existingIdx >= 0) {
+          appState.cards[existingIdx] = payload;
+        } else {
+          appState.cards.push(payload);
+        }
+        applyFilters(); 
+        
+        // Gunakan timeout 5 detik untuk mencegah loading terus-menerus jika koneksi Firestore lambat
+        const savePromise = setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'cards', cardId), payload);
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000));
+        
+        await Promise.race([savePromise, timeoutPromise]).catch(err => {
+            console.warn("Koneksi lambat, perubahan disimpan ke lokal terlebih dahulu:", err);
+        });
+
+        showToast("Kartu berhasil disimpan!", "success");
+        closeCardModal();
+      } catch (err) { 
+        showToast("Gagal menyimpan: " + err.message, "error"); 
+      } finally {
+        btnSave.disabled = false;
+        btnSave.innerHTML = originalBtnHTML;
+        btnSave.classList.remove("opacity-70", "cursor-not-allowed");
+      }
+    });
+
+    document.getElementById("btnConfirmDelete")?.addEventListener("click", async () => {
+      if (!appState.deleteTarget) return;
+      const { type, id } = appState.deleteTarget;
+      closeDeleteModal();
+
+      try {
+        if (type === "card") {
+          await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'cards', id));
+          showToast("Kartu berhasil dihapus!", "success");
+        } else if (type === "user") {
+          await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', id));
+          showToast("Pengguna berhasil dihapus!", "success");
+        } else if (type === "category") {
+          let docId = null;
+          if (appState.categoryDocs) {
+            const found = appState.categoryDocs.find(d => d.name === id);
+            if (found) docId = found.id;
+          }
+          if (!docId) docId = "cat_" + id.toLowerCase().replace(/[^a-z0-9]/g, '_');
+
+          await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', docId));
+
+          const fallbackCat = appState.categories.find(c => c !== "Semua" && c !== id) || "Semua";
+          const affectedCards = (appState.cards || []).filter(c => c.category === id);
+          for (const c of affectedCards) {
+            try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'cards', c.id), { category: fallbackCat }, { merge: true }); } catch(e) {}
+          }
+          showToast(`Kategori dihapus. Kartu dialihkan ke "${fallbackCat}".`, "success");
+        } else if (type === "kick_session") {
+          await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'active_sessions', id));
+          showToast("Sesi pengguna diakhiri paksa!", "info");
+        }
+      } catch (e) { showToast("Gagal menghapus: " + e.message, "error"); }
+    });
+
+  </script>
+</body>
+</html>
