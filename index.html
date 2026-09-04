@@ -1999,22 +1999,17 @@
       showToast("Menyimpan kartu...", "info");
       
       try {
-        // Simpan ke state lokal terlebih dahulu untuk respons UI yang cepat
+        // Tampilkan kartu segera di UI (optimistic update)
         const existingIdx = appState.cards.findIndex(c => c.id === cardId);
         if (existingIdx >= 0) {
           appState.cards[existingIdx] = payload;
         } else {
           appState.cards.push(payload);
         }
-        applyFilters(); 
-        
-        // Gunakan timeout 5 detik untuk mencegah loading terus-menerus jika koneksi Firestore lambat
-        const savePromise = setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'cards', cardId), payload);
-        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000));
-        
-        await Promise.race([savePromise, timeoutPromise]).catch(err => {
-            throw err;
-        });
+        applyFilters();
+
+        // Simpan ke Firebase (tanpa batas waktu, biarkan selesai dengan sendirinya)
+        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'cards', cardId), payload);
 
         showToast("Kartu berhasil disimpan secara permanen!", "success");
         closeCardModal();
