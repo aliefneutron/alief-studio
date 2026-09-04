@@ -331,18 +331,8 @@
           </button>
         </div>
 
-        <!-- Skeleton Loading -->
-        <div id="skeletonLoader" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          <div class="flex flex-col gap-3 animate-pulse bg-white dark:bg-yt-darkCard p-3 rounded-2xl border border-neutral-200 dark:border-yt-darkBorder">
-            <div class="w-full h-48 bg-neutral-300 dark:bg-neutral-800 rounded-xl"></div>
-            <div class="h-4 bg-neutral-300 dark:bg-neutral-800 rounded w-4/5"></div>
-            <div class="h-3 bg-neutral-300 dark:bg-neutral-800 rounded w-1/2"></div>
-          </div>
-          <div class="flex flex-col gap-3 animate-pulse bg-white dark:bg-yt-darkCard p-3 rounded-2xl border border-neutral-200 dark:border-yt-darkBorder">
-            <div class="w-full h-48 bg-neutral-300 dark:bg-neutral-800 rounded-xl"></div>
-            <div class="h-4 bg-neutral-300 dark:bg-neutral-800 rounded w-4/5"></div>
-            <div class="h-3 bg-neutral-300 dark:bg-neutral-800 rounded w-1/2"></div>
-          </div>
+        <!-- Skeleton Loading (Dinonaktifkan) -->
+        <div id="skeletonLoader" class="hidden">
         </div>
 
       </main>
@@ -890,20 +880,7 @@
     }
 
     function showSkeleton(show) {
-      const skeleton = document.getElementById("skeletonLoader");
-      const cardGrid = document.getElementById("cardGrid");
-      if (!skeleton || !cardGrid) return;
-      if (show) {
-        skeleton.classList.remove("hidden");
-        skeleton.classList.add("grid");
-        cardGrid.classList.add("hidden");
-        cardGrid.classList.remove("grid");
-      } else {
-        skeleton.classList.add("hidden");
-        skeleton.classList.remove("grid");
-        cardGrid.classList.remove("hidden");
-        cardGrid.classList.add("grid");
-      }
+      // Skeleton loader telah dinonaktifkan
     }
 
     function escapeHtml(str) {
@@ -1106,8 +1083,12 @@
           }`;
           chip.textContent = cat;
           chip.addEventListener("click", () => {
-            appState.activeCategory = cat;
-            handleSearch(""); // Kosongkan pencarian otomatis
+            if (appState.activeCategory === cat && cat !== "Semua") {
+              appState.activeCategory = "Semua";
+            } else {
+              appState.activeCategory = cat;
+            }
+            handleSearch(""); // Kosongkan pencarian & terapkan filter
             renderCategories();
           });
           chipsContainer.appendChild(chip);
@@ -1122,7 +1103,11 @@
           }`;
           sideBtn.innerHTML = `<i class="fa-solid fa-hashtag text-xs w-5 text-center text-neutral-400"></i> <span>${cat}</span>`;
           sideBtn.addEventListener("click", () => {
-            appState.activeCategory = cat;
+            if (appState.activeCategory === cat && cat !== "Semua") {
+              appState.activeCategory = "Semua";
+            } else {
+              appState.activeCategory = cat;
+            }
             handleSearch(""); // Kosongkan pencarian otomatis
             renderCategories();
           });
