@@ -112,7 +112,7 @@
               id="gateAccessCodeInput" 
               required 
               autocomplete="off"
-              placeholder="Contoh: USER2026 atau MASBRO2026"
+              placeholder="Contoh: USER2026"
               class="w-full pl-11 pr-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-2xl focus:outline-none focus:border-blue-500 font-mono tracking-wider uppercase text-sm font-bold placeholder:normal-case placeholder:font-normal placeholder:tracking-normal text-neutral-900 dark:text-white"
             >
           </div>
@@ -127,32 +127,11 @@
           id="btnSubmitAccessCode"
           class="w-full py-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-semibold rounded-2xl transition shadow-md shadow-blue-600/30 flex items-center justify-center gap-2 text-sm"
         >
-          <i class="fa-solid fa-lock-open"></i>
-          <span>Buka Dashboard Sekarang</span>
+          <i class="fa-solid fa-key"></i>
+          <span>Masuk dan Verifikasi</span>
         </button>
 
-        <!-- Pilihan Cepat Demo Akun -->
-        <div class="mt-2 pt-4 border-t border-neutral-200 dark:border-neutral-800 flex flex-col gap-2">
-          <span class="text-[11px] font-semibold text-neutral-400 text-center">Uji Coba Cepat (Klik untuk masuk instan):</span>
-          <div class="grid grid-cols-2 gap-2">
-            <button 
-              type="button" 
-              id="btnGateQuickUser"
-              class="px-3 py-2.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-xl font-medium text-xs text-center transition flex items-center justify-center gap-1.5"
-            >
-              <i class="fa-solid fa-user"></i>
-              <span>User (USER2026)</span>
-            </button>
-            <button 
-              type="button" 
-              id="btnGateQuickAdmin"
-              class="px-3 py-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/20 rounded-xl font-medium text-xs text-center transition flex items-center justify-center gap-1.5"
-            >
-              <i class="fa-solid fa-crown"></i>
-              <span>Admin (MASBRO2026)</span>
-            </button>
-          </div>
-        </div>
+
       </form>
 
     </div>
@@ -1558,11 +1537,9 @@
         });
         
         const combined = [...users];
+        // Hanya tambahkan Admin default jika belum ada di Firestore
         if (!combined.some(u => u.accessCode === "MASBRO2026")) {
           combined.unshift({ id: "usr_admin", name: "Admin Utama", accessCode: "MASBRO2026", role: "admin", status: "Aktif" });
-        }
-        if (!combined.some(u => u.accessCode === "USER2026")) {
-          combined.push({ id: "usr_002", name: "User Reguler", accessCode: "USER2026", role: "user", status: "Aktif" });
         }
         appState.usersList = combined;
         
@@ -1718,15 +1695,6 @@
       loginWithAccessCode(document.getElementById("gateAccessCodeInput").value.trim());
     });
 
-    document.getElementById("btnGateQuickUser")?.addEventListener("click", () => {
-      document.getElementById("gateAccessCodeInput").value = "USER2026";
-      loginWithAccessCode("USER2026");
-    });
-
-    document.getElementById("btnGateQuickAdmin")?.addEventListener("click", () => {
-      document.getElementById("gateAccessCodeInput").value = "MASBRO2026";
-      loginWithAccessCode("MASBRO2026");
-    });
 
     document.getElementById("btnSidebarLockApp")?.addEventListener("click", lockApplication);
     document.getElementById("btnSwitchLock")?.addEventListener("click", lockApplication);
@@ -2081,6 +2049,9 @@
           showToast("Kartu berhasil dihapus!", "success");
         } else if (type === "user") {
           await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', id));
+          // Langsung update UI tanpa tunggu onSnapshot
+          appState.usersList = appState.usersList.filter(u => u.id !== id);
+          renderUserTable(appState.usersList);
           showToast("Pengguna berhasil dihapus!", "success");
         } else if (type === "category") {
           let docId = null;
