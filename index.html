@@ -2013,13 +2013,13 @@
         const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000));
         
         await Promise.race([savePromise, timeoutPromise]).catch(err => {
-            console.warn("Koneksi lambat, perubahan disimpan ke lokal terlebih dahulu:", err);
+            throw err;
         });
 
-        showToast("Kartu berhasil disimpan!", "success");
+        showToast("Kartu berhasil disimpan secara permanen!", "success");
         closeCardModal();
       } catch (err) { 
-        showToast("Gagal menyimpan: " + err.message, "error"); 
+        showToast("Gagal menyimpan ke server: " + err.message, "error"); 
       } finally {
         btnSave.disabled = false;
         btnSave.innerHTML = originalBtnHTML;
