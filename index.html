@@ -1805,16 +1805,32 @@
         const rawImg = new Image();
         rawImg.onload = () => {
           const canvas = document.createElement("canvas");
-          const MAX_WIDTH = 1200; const MAX_HEIGHT = 800;
+          const MAX_WIDTH = 800; const MAX_HEIGHT = 600;
           let width = rawImg.width; let height = rawImg.height;
           if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } } 
           else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
-          canvas.width = width; canvas.height = height;
-          canvas.getContext("2d").drawImage(rawImg, 0, 0, width, height);
-          const optimizedDataUrl = canvas.toDataURL("image/webp", 0.85);
+          canvas.width = Math.round(width); canvas.height = Math.round(height);
+          canvas.getContext("2d").drawImage(rawImg, 0, 0, Math.round(width), Math.round(height));
+
+          // Kompres dengan kualitas rendah terlebih dahulu
+          let quality = 0.65;
+          let optimizedDataUrl = canvas.toDataURL("image/webp", quality);
+
+          // Jika masih > 700KB (sekitar 900KB base64), kompres lebih agresif
+          while (optimizedDataUrl.length > 700000 && quality > 0.2) {
+            quality -= 0.1;
+            optimizedDataUrl = canvas.toDataURL("image/webp", quality);
+          }
+
+          // Jika masih terlalu besar, tolak
+          if (optimizedDataUrl.length > 900000) {
+            showToast("Gambar terlalu besar! Harap gunakan URL gambar eksternal.", "error");
+            return;
+          }
+
           document.getElementById("formFinalImageData").value = optimizedDataUrl;
           displayPreviewImage(optimizedDataUrl);
-          showToast("Gambar lokal siap digunakan!", "success");
+          showToast(`Gambar dioptimasi (kualitas ${Math.round(quality*100)}%). Siap digunakan!`, "success");
         };
         rawImg.onerror = () => {
           showToast("Gagal membaca file gambar", "error");
