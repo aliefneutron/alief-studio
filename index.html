@@ -1365,7 +1365,7 @@
                 ${user.role}
               </span>
             </div>
-            <button id="btnHeaderLockApp" onclick="lockApplication()" class="p-2 text-neutral-500 hover:text-red-500 text-sm transition" title="Keluar Aplikasi">
+            <button id="btnHeaderLockApp" class="btn-lock-app p-2 text-neutral-500 hover:text-red-500 text-sm transition" title="Keluar Aplikasi">
               <i class="fa-solid fa-right-from-bracket"></i>
             </button>
           </div>
@@ -1620,7 +1620,14 @@
       document.getElementById("authGateScreen").classList.remove("hidden");
       showToast("Aplikasi telah dikunci kembali", "info");
     }
-    window.lockApplication = lockApplication; // expose ke onclick HTML
+    window.lockApplication = lockApplication;
+
+    // Event delegation untuk tombol logout dinamis
+    document.addEventListener("click", (e) => {
+      if (e.target.closest(".btn-lock-app")) {
+        lockApplication();
+      }
+    });
 
     async function recordActiveSession(accessCode) {
       if (!appState.currentUser) return;
