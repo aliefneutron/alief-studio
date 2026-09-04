@@ -87,7 +87,7 @@
       
       <!-- Brand Logo & Judul -->
       <div class="flex flex-col items-center text-center gap-2">
-        <img src="https://drive.google.com/uc?export=view&id=19I0SECAPX44_PIQERs51r_7WgRLO_WMG" alt="AliefStudio Logo" class="w-20 h-20 rounded-full object-cover shadow-xl shadow-blue-500/20 border-2 border-blue-500 dark:border-blue-400" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
+        <img src="logo.png" alt="AliefStudio Logo" class="w-20 h-20 rounded-full object-cover shadow-xl shadow-blue-500/20 border-2 border-blue-500 dark:border-blue-400" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
         <div class="flex flex-col items-center mt-1">
           <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
             Alief<span class="text-blue-600 dark:text-blue-400">Studio</span>
@@ -168,7 +168,7 @@
           <i class="fa-solid fa-bars"></i>
         </button>
         <a href="#" class="flex items-center gap-2 select-none focus:outline-none">
-          <img src="https://drive.google.com/uc?export=view&id=19I0SECAPX44_PIQERs51r_7WgRLO_WMG" alt="AliefStudio Logo" class="w-8 h-8 rounded-xl object-cover shadow-sm border border-neutral-200 dark:border-neutral-700" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
+          <img src="logo.png" alt="AliefStudio Logo" class="w-8 h-8 rounded-xl object-cover shadow-sm border border-neutral-200 dark:border-neutral-700" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
           <span class="font-bold tracking-tight text-lg font-sans flex items-center">
             Alief<span class="text-blue-600 dark:text-blue-400">Studio</span>
             <span class="text-[10px] text-neutral-500 ml-1.5 px-1.5 py-0.5 bg-neutral-200 dark:bg-yt-darkBorder rounded uppercase font-semibold">Visual</span>
@@ -1375,7 +1375,7 @@
         authHeaderArea.innerHTML = `
           <div class="flex items-center gap-2">
             <div class="flex items-center gap-2 p-1.5 rounded-full bg-neutral-100 dark:bg-yt-darkHover border border-neutral-200 dark:border-neutral-800">
-              <img src="${user.avatar || 'https://drive.google.com/uc?export=view&id=19I0SECAPX44_PIQERs51r_7WgRLO_WMG'}" class="w-7 h-7 rounded-full object-cover border-2 ${isAdmin ? 'border-amber-500' : 'border-blue-500'}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
+              <img src="${user.avatar || 'logo.png'}" class="w-7 h-7 rounded-full object-cover border-2 ${isAdmin ? 'border-amber-500' : 'border-blue-500'}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';">
               <span class="text-xs font-semibold hidden md:inline max-w-[100px] truncate">${escapeHtml(user.name)}</span>
               <span class="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${isAdmin ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400' : 'bg-blue-500/20 text-blue-600 dark:text-blue-400'}">
                 ${user.role}
@@ -1617,7 +1617,7 @@
           name: match.name || "Pengguna",
           accessCode: match.accessCode,
           role: match.role || "user",
-          avatar: "https://drive.google.com/uc?export=view&id=19I0SECAPX44_PIQERs51r_7WgRLO_WMG"
+          avatar: "logo.png"
         };
         unlockDashboard();
         await recordActiveSession(code);
