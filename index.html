@@ -1937,22 +1937,43 @@
         }
 
         showToast("Memperbarui nama kategori...", "info");
+
+        // Cari docId dari Firestore (categoryDocs) berdasarkan nama lama
         let docId = null;
         if (appState.categoryDocs) {
-          const found = appState.categoryDocs.find(d => d.name === oldName);
+          const found = appState.categoryDocs.find(d => d.name.toLowerCase() === oldName.toLowerCase());
           if (found) docId = found.id;
         }
-        if (!docId) docId = "cat_" + oldName.toLowerCase().replace(/[^a-z0-9]/g, '_');
 
         try {
-          await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', docId), {
-            name: inputName, updatedAt: new Date().toISOString()
-          }, { merge: true });
+          if (docId) {
+            // Dokumen ditemukan di Firestore → update nama di dokumen yang sama
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', docId), {
+              name: inputName, updatedAt: new Date().toISOString()
+            }, { merge: true });
+          } else {
+            // Dokumen tidak ditemukan (kategori dari default) → buat dokumen baru
+            const newDocId = "cat_" + Date.now();
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', newDocId), {
+              name: inputName, createdAt: new Date().toISOString()
+            });
+          }
 
-          const affectedCards = (appState.cards || []).filter(c => c.category === oldName);
+          // Update nama kategori di semua kartu yang terpengaruh
+          const affectedCards = (appState.cards || []).filter(c => (c.category || "").toLowerCase() === oldName.toLowerCase());
           for (const c of affectedCards) {
             try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'cards', c.id), { category: inputName }, { merge: true }); } catch(err) {}
           }
+
+          // Update appState langsung tanpa tunggu onSnapshot
+          appState.categories = appState.categories.map(c => c === oldName ? inputName : c);
+          if (appState.categoryDocs) {
+            appState.categoryDocs = appState.categoryDocs.map(d => d.name === oldName ? { ...d, name: inputName } : d);
+          }
+          renderCategories();
+          loadCategoryTable();
+          updateFormCategoryOptions();
+
           showToast(`Kategori berhasil diubah menjadi "${inputName}"!`, "success");
           resetCategoryForm();
         } catch (err) { showToast("Gagal memperbarui: " + err.message, "error"); }
